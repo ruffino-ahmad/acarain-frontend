@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/layouts/DashboardLayout";
-import Dashboard from "@/components/views/member/Dashboard";
+import Dashboard from "@/components/views/Member/Dashboard";
 
 const MemberDashboardPage = () => {
   return (
