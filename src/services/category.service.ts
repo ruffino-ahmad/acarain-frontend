@@ -1,9 +1,38 @@
 import instance from "@/libs/axios/instance";
 import endpoint from "./endpoint.constant";
+import type {
+  IApiResponse,
+  ICategory,
+  ICreateCategory,
+  IUpdateCategory,
+} from "@/types/Category";
 
 const categoryServices = {
   getCategories: (params?: string) => {
-    return instance.get(`${endpoint.CATEGORY}?${params}`);
+    return instance.get<IApiResponse<ICategory[]>>(
+      `${endpoint.CATEGORY}?${params}`
+    );
+  },
+
+  getCategoryById: (id: string) => {
+    return instance.get<IApiResponse<ICategory>>(`${endpoint.CATEGORY}/${id}`);
+  },
+
+  createCategory: (payload: ICreateCategory) => {
+    return instance.post<IApiResponse<ICategory>>(endpoint.CATEGORY, payload);
+  },
+
+  deleteCategory: (id: string) => {
+    return instance.delete<IApiResponse<ICategory>>(
+      `${endpoint.CATEGORY}/${id}`
+    );
+  },
+
+  updateCategory: (id: string, payload: IUpdateCategory) => {
+    return instance.patch<IApiResponse<ICategory>>(
+      `${endpoint.CATEGORY}/${id}`,
+      payload
+    );
   },
 };
 

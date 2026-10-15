@@ -5,17 +5,23 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  useDisclosure,
 } from "@heroui/react";
 import Image from "next/image";
 import { Router, useRouter } from "next/router";
-import { Key, ReactNode, useCallback, useEffect } from "react";
+import { Key, ReactNode, useCallback, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { COLUMN_LISTS_CATEGORY } from "./Category.constant";
 import useCategory from "./useCategory";
-import InputFile from "@/components/ui/InputFile";
+import type { ICategory } from "@/types/Category";
+import AddCategoryModal from "./AddCategoryModal";
+import DeleteCategoryModal from "./DeleteCategoryModal";
 
 const Category = () => {
   const { push, isReady, query } = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  );
   const {
     setURL,
     dataCategory,
@@ -28,7 +34,11 @@ const Category = () => {
     handleClearSearch,
     isLoadingCategory,
     isRefetchingCategory,
+    refetchCategory,
   } = useCategory();
+
+  const addCategoryModal = useDisclosure();
+  const deleteCategoryModal = useDisclosure();
 
   useEffect(() => {
     if (isReady) {
@@ -37,14 +47,25 @@ const Category = () => {
   }, [isReady]);
 
   const renderCell = useCallback(
-    (category: Record<string, unknown>, columnKey: Key) => {
+    (category: ICategory, columnKey: Key) => {
       const cellValue = category[columnKey as keyof typeof category];
 
       switch (columnKey) {
-        // case "icon":
-        //   return (
-        //     <Image src={`${cellValue}`} alt="Icon" width={100} height={200} />
-        //   );
+        case "iconUrl":
+          return typeof cellValue === "string" && cellValue ? (
+            <Image
+              src={`${cellValue}`}
+              alt="Icon"
+              width={100}
+              height={100}
+              className="h-15 w-15 rounded-md object-cover" 
+              // di atas buat ubah ukuran
+            />
+          ) : (
+            <div className="bg-default-100 text-default-500 flex h-12 w-12 items-center justify-center rounded-md text-xs font-semibold uppercase">
+              {String(category.name ?? "?").slice(0, 2)}
+            </div>
+          );
         case "actions":
           return (
             <Dropdown>
@@ -60,7 +81,14 @@ const Category = () => {
                 >
                   Detail Category
                 </DropdownItem>
-                <DropdownItem key="delete-category" className="text-danger-500">
+                <DropdownItem
+                  key="delete-category"
+                  className="text-danger-500"
+                  onPress={() => {
+                    setSelectedCategory(category);
+                    deleteCategoryModal.onOpen();
+                  }}
+                >
                   Delete
                 </DropdownItem>
               </DropdownMenu>
@@ -70,7 +98,7 @@ const Category = () => {
           return cellValue as ReactNode;
       }
     },
-    [push]
+    [push, deleteCategoryModal]
   );
   return (
     <section>
@@ -88,12 +116,21 @@ const Category = () => {
           onChangeSearch={handleChangeSearch}
           onClearSearch={handleClearSearch}
           renderCell={renderCell}
-          onClickButtonTopContent={() => {}}
+          onClickButtonTopContent={addCategoryModal.onOpen}
           totalPages={dataCategory?.pagination?.totalPages}
         />
       )}
+      <AddCategoryModal
+        refetchCategory={refetchCategory}
+        {...addCategoryModal}
+      />
 
-      <InputFile name="input" isDropable />
+      <DeleteCategoryModal
+        {...deleteCategoryModal}
+        onClose={deleteCategoryModal.onClose}
+        refetchCategory={refetchCategory}
+        selectedCategory={selectedCategory}
+      />
     </section>
   );
 };

@@ -1,7 +1,7 @@
 const COLUMN_LISTS_CATEGORY = [
   {
     name: "ICON",
-    uid: "icon",
+    uid: "iconUrl",
   },
   {
     name: "NAME",

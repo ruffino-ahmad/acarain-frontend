@@ -17,16 +17,16 @@ import {
 import { ChangeEvent, Key, ReactNode, useMemo } from "react";
 import { CiSearch } from "react-icons/ci";
 
-interface DataTableProps {
+interface DataTableProps<T> {
   columns: Record<string, unknown>[];
-  data: Record<string, unknown>[];
-  renderCell: (item: Record<string, unknown>, columnKey: Key) => ReactNode;
+  data: T[];
+  renderCell: (item: T, columnKey: Key) => ReactNode;
   onClearSearch: () => void;
   onChangeSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   buttonTopContentLabel?: string;
   onClickButtonTopContent?: () => void;
   currentPage: number;
-  totalPages: number;
+  totalPages?: number;
   onChangePage: (page: number) => void;
   limit: string;
   onChangeLimit: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -34,7 +34,7 @@ interface DataTableProps {
   isLoading?: boolean;
 }
 
-const DataTable = (props: DataTableProps) => {
+const DataTable = <T,>(props: DataTableProps<T>) => {
   const {
     columns,
     data,
@@ -51,6 +51,7 @@ const DataTable = (props: DataTableProps) => {
     currentPage,
     isLoading,
   } = props;
+  const resolvedTotalPages = totalPages ?? 0;
 
   const TopContent = useMemo(() => {
     return (
@@ -93,20 +94,20 @@ const DataTable = (props: DataTableProps) => {
             <SelectItem key={String(item.value)}>{item.label}</SelectItem>
           ))}
         </Select>
-        {totalPages > 1 && (
+        {resolvedTotalPages > 1 && (
           <Pagination
             isCompact
             showControls
             color="danger"
             page={currentPage}
-            total={totalPages}
+            total={resolvedTotalPages}
             onChange={onChangePage}
             loop
           />
         )}
       </div>
     );
-  }, [limit, currentPage, totalPages, onChangeLimit, onChangePage]);
+  }, [limit, currentPage, resolvedTotalPages, onChangeLimit, onChangePage]);
   return (
     <Table
       topContent={TopContent}
@@ -138,7 +139,7 @@ const DataTable = (props: DataTableProps) => {
         }
       >
         {item => (
-          <TableRow key={item._id as Key}>
+          <TableRow key={String((item as Record<string, unknown>)._id)}>
             {columnKey => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
