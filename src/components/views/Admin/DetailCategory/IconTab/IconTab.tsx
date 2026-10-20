@@ -1,20 +1,8 @@
 import InputFile from "@/components/ui/InputFile";
 import { Card, CardBody, CardHeader, Skeleton, Button } from "@heroui/react";
-import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import uploadServices from "@/services/upload.service";
-import type { UploadMimeType } from "@/types/Upload";
-import { extractErrorMessage } from "@/utils/api-error";
-import toast from "@/utils/toast";
-import useUpdateCategory from "../useUpdateCategory";
 
-const ALLOWED_MIME_TYPES: UploadMimeType[] = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-];
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+import useIconTab from "./useIconTab";
 
 interface IconTabProps {
   currentIconUrl?: string | null;
@@ -25,104 +13,16 @@ interface IconTabProps {
 const IconTab = (props: IconTabProps) => {
   const { currentIconUrl, isLoading, id } = props;
 
-  const [pendingBlob, setPendingBlob] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [iconError, setIconError] = useState<string | undefined>(undefined);
-
-  const previewUrlRef = useRef<string | null>(null);
-  const pendingBlobRef = useRef<string | null>(null);
-  const isCommittedRef = useRef(false);
-
-  const { mutateUpdateCategory, isPendingUpdateCategory } =
-    useUpdateCategory(id);
-
-  const applyPreview = useCallback((file: File | null) => {
-    if (previewUrlRef.current) {
-      URL.revokeObjectURL(previewUrlRef.current);
-    }
-    const next = file ? URL.createObjectURL(file) : null;
-    previewUrlRef.current = next;
-    setPreview(next);
-  }, []);
-
-  const clearPending = useCallback(() => {
-    const blob = pendingBlobRef.current;
-    if (blob && !isCommittedRef.current) {
-      pendingBlobRef.current = null;
-      uploadServices.deleteBlob(blob).catch(() => undefined);
-    }
-    setPendingBlob(null);
-    applyPreview(null);
-  }, [applyPreview]);
-
-  useEffect(() => {
-    return () => {
-      if (previewUrlRef.current) {
-        URL.revokeObjectURL(previewUrlRef.current);
-      }
-      const blob = pendingBlobRef.current;
-      if (blob && !isCommittedRef.current) {
-        uploadServices.deleteBlob(blob).catch(() => undefined);
-      }
-    };
-  }, []);
-
-  const uploadIconMutation = useMutation({
-    mutationFn: (file: File) => uploadServices.uploadFile(file, "categories"),
-    onSuccess(blobName, file) {
-      const previous = pendingBlobRef.current;
-      if (previous && previous !== blobName) {
-        uploadServices.deleteBlob(previous).catch(() => undefined);
-      }
-
-      isCommittedRef.current = false;
-      pendingBlobRef.current = blobName;
-      setPendingBlob(blobName);
-      applyPreview(file);
-      setIconError(undefined);
-    },
-    onError(error) {
-      toast.error(extractErrorMessage(error));
-    },
-  });
-
-  const handleUploadIcon = (files: FileList) => {
-    const file = files?.[0];
-    if (!file) return;
-
-    if (!ALLOWED_MIME_TYPES.includes(file.type as UploadMimeType)) {
-      setIconError("Icon must be a JPG, PNG, or WEBP image");
-      return;
-    }
-    if (file.size > MAX_FILE_SIZE_BYTES) {
-      setIconError("Icon must not be larger than 5 MB");
-      return;
-    }
-
-    setIconError(undefined);
-    uploadIconMutation.mutate(file);
-  };
-
-  const handleSaveIcon = () => {
-    if (!pendingBlob) return;
-
-    mutateUpdateCategory(
-      { icon: pendingBlob },
-      {
-        onSuccess() {
-          isCommittedRef.current = true;
-          pendingBlobRef.current = null;
-          setPendingBlob(null);
-          applyPreview(null);
-        },
-      }
-    );
-  };
-
-  const handleCancelSelection = () => {
-    clearPending();
-    setIconError(undefined);
-  };
+  const {
+    preview,
+    iconError,
+    pendingBlob,
+    isUploadingIcon,
+    isPendingUpdateCategory,
+    handleUploadIcon,
+    handleSaveIcon,
+    handleCancelSelection,
+  } = useIconTab({ id });
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
@@ -168,7 +68,7 @@ const IconTab = (props: IconTabProps) => {
             preview={preview ?? undefined}
             onUpload={handleUploadIcon}
             onDelete={handleCancelSelection}
-            isUploading={uploadIconMutation.isPending}
+            isUploading={isUploadingIcon}
             isInvalid={iconError !== undefined}
             errorMessage={iconError}
           />
@@ -179,7 +79,7 @@ const IconTab = (props: IconTabProps) => {
             isDisabled={
               !pendingBlob ||
               isPendingUpdateCategory ||
-              uploadIconMutation.isPending
+              isUploadingIcon
             }
           >
             {isPendingUpdateCategory ? "Saving..." : "Save Changes"}

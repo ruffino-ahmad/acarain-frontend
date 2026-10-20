@@ -1,5 +1,4 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { ICategory } from "@/types/Category";
+import type { ICategory } from "@/types/Category";
 import {
   Button,
   Card,
@@ -9,25 +8,9 @@ import {
   Skeleton,
   Textarea,
 } from "@heroui/react";
-import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import useUpdateCategory from "../useUpdateCategory";
+import { Controller } from "react-hook-form";
 
-const schema = yup.object({
-  name: yup
-    .string()
-    .min(3, "Name must be at least 3 characters long")
-    .max(100, "Name cannot exceed 100 characters")
-    .required("Please enter name"),
-  description: yup
-    .string()
-    .min(3, "Description must be at least 3 characters long")
-    .max(500, "Description cannot exceed 500 characters")
-    .required("Please enter description"),
-});
-
-type FormDataInfo = yup.InferType<typeof schema>;
+import useInfoTab from "./useInfoTab";
 
 interface InfoTabProps {
   dataCategory: ICategory;
@@ -41,36 +24,11 @@ const InfoTab = (props: InfoTabProps) => {
   const {
     control,
     handleSubmit,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm<FormDataInfo>({
-    resolver: yupResolver(schema),
-    defaultValues: {
-      name: dataCategory.name ?? "",
-      description: dataCategory.description ?? "",
-    },
-  });
-
-  const { mutateUpdateCategory, isPendingUpdateCategory } =
-    useUpdateCategory(id);
-
-  useEffect(() => {
-    reset({
-      name: dataCategory.name ?? "",
-      description: dataCategory.description ?? "",
-    });
-  }, [dataCategory, reset]);
-
-  const handleSaveInfo = (data: FormDataInfo) => {
-    mutateUpdateCategory(
-      { name: data.name, description: data.description },
-      {
-        onSuccess() {
-          reset(data);
-        },
-      }
-    );
-  };
+    errors,
+    isDirty,
+    handleSaveInfo,
+    isPendingUpdateCategory,
+  } = useInfoTab({ dataCategory, id });
 
   return (
     <Card className="w-full p-4 lg:w-1/2">

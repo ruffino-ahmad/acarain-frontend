@@ -1,14 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 import * as yup from "yup";
 
-import useDebounce from "@/hooks/useDebounce";
+import useRegionOptions from "@/hooks/useRegionOptions";
 import categoryServices from "@/services/category.service";
 import eventServices from "@/services/event.service";
-import regionServices from "@/services/region.service";
 import uploadServices from "@/services/upload.service";
 import type { ICreateEvent } from "@/types/Event";
 import type { UploadMimeType } from "@/types/Upload";
@@ -68,13 +67,8 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
   const { onClose, refetchEvent } = props;
 
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
-  const [provinceSearch, setProvinceSearch] = useState("");
-  const [regencySearch, setRegencySearch] = useState("");
   const previewUrlRef = useRef<string | null>(null);
   const uploadedBlobRef = useRef<string | null>(null);
-
-  const debounceProvince = useDebounce();
-  const debounceRegency = useDebounce();
 
   const {
     control,
@@ -112,6 +106,20 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
     ? slugify(eventName, { lower: true, strict: true, trim: true })
     : "";
 
+  const {
+    provinceList,
+    regencyList,
+    filteredProvinces,
+    filteredRegencies,
+    isPendingProvinces,
+    isPendingRegencies,
+    handleProvinceSearch,
+    handleRegencySearch,
+    handleProvinceOpen,
+    handleRegencyOpen,
+    resetRegionSearch,
+  } = useRegionOptions({ provinceId: selectedProvinceId, enabled: !isOnline });
+
   const applyPreview = useCallback((file: File | null) => {
     if (previewUrlRef.current) {
       URL.revokeObjectURL(previewUrlRef.current);
@@ -146,57 +154,6 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
     },
     staleTime: 5 * 60 * 1000,
   });
-
-  const { data: provinceList, isPending: isPendingProvinces } = useQuery({
-    queryKey: ["Region", "provinces"],
-    queryFn: async () => {
-      const res = await regionServices.getProvinces();
-      return res.data.data;
-    },
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const { data: regencyList, isPending: isPendingRegencies } = useQuery({
-    queryKey: ["Region", "regencies", selectedProvinceId],
-    queryFn: async () => {
-      const res = await regionServices.getRegencies(Number(selectedProvinceId));
-      return res.data.data[0]?.regencies ?? [];
-    },
-    enabled: Boolean(selectedProvinceId) && !isOnline,
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const filteredProvinces = useMemo(
-    () =>
-      (provinceList ?? []).filter(province =>
-        province.name.toLowerCase().includes(provinceSearch)
-      ),
-    [provinceList, provinceSearch]
-  );
-
-  const filteredRegencies = useMemo(
-    () =>
-      (regencyList ?? []).filter(regency =>
-        regency.name.toLowerCase().includes(regencySearch)
-      ),
-    [regencyList, regencySearch]
-  );
-
-  const handleProvinceSearch = (value: string) => {
-    debounceProvince(() => setProvinceSearch(value.trim().toLowerCase()), 300);
-  };
-
-  const handleRegencySearch = (value: string) => {
-    debounceRegency(() => setRegencySearch(value.trim().toLowerCase()), 300);
-  };
-
-  const handleProvinceOpen = (isOpen: boolean) => {
-    if (isOpen) setProvinceSearch("");
-  };
-
-  const handleRegencyOpen = (isOpen: boolean) => {
-    if (isOpen) setRegencySearch("");
-  };
 
   const uploadBannerMutation = useMutation({
     mutationFn: (file: File) => uploadServices.uploadFile(file, "banners"),
@@ -244,15 +201,13 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
       setValue("address", "");
       setValue("province", "");
       setValue("regency", "");
-      setProvinceSearch("");
-      setRegencySearch("");
+      resetRegionSearch();
     }
   };
 
   const handleProvinceChange = (value: string) => {
     setValue("province", value, { shouldValidate: true });
     setValue("regency", "");
-    setRegencySearch("");
   };
 
   const addEventService = async (payload: FormDataAddEvent) => {
@@ -306,8 +261,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
       onSuccess() {
         uploadedBlobRef.current = null;
         toast.success("Event created successfully");
-        setProvinceSearch("");
-        setRegencySearch("");
+        resetRegionSearch();
         reset();
         applyPreview(null);
         onClose();
@@ -331,8 +285,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
 
   const handleClose = () => {
     disposePendingBlob();
-    setProvinceSearch("");
-    setRegencySearch("");
+    resetRegionSearch();
     reset();
     applyPreview(null);
     onClose();
