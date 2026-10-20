@@ -3,6 +3,7 @@ const endpoint = {
   CATEGORY: "/categories",
   UPLOADS: "/uploads",
   EVENT: "/events",
+  TICKET: "/tickets",
   REGION: "/regions",
 };
 

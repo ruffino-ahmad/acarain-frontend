@@ -4,6 +4,7 @@ import CoverTab from "./CoverTab";
 import InfoTab from "./InfoTab";
 import LocationTab from "./LocationTab";
 import useDetailEvent from "./useDetailEvent";
+import TicketTab from "./TicketTab";
 
 const DetailEvent = () => {
   const { dataEvent, isLoadingEvent, id } = useDetailEvent();
@@ -26,6 +27,9 @@ const DetailEvent = () => {
       </Tab>
       <Tab key="location" title="Location">
         <LocationTab id={id} dataEvent={dataEvent} />
+      </Tab>
+      <Tab key="ticket" title="Ticket">
+        <TicketTab />
       </Tab>
     </Tabs>
   );

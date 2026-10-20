@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import eventServices from "@/services/event.service";
-import type { IApiResponse } from "@/types/Category";
 import type { IEvent } from "@/types/Event";
+import { IApiResponse } from "@/types/Pagination";
 
 const useEvent = () => {
   const router = useRouter();

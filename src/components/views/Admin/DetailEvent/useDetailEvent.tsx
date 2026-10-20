@@ -7,7 +7,7 @@ const useDetailEvent = () => {
   const { query, isReady } = useRouter();
 
   const getEventById = async (id: string) => {
-    const { data } = await eventServices.getEventById(id);
+    const { data } = await eventServices.getEventById(`${query.id}`);
     return data.data;
   };
 
