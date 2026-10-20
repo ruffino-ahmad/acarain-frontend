@@ -1,4 +1,5 @@
 import { LIMIT_LISTS } from "@/constants/list.constants";
+import useChangeUrl from "@/hooks/useChangeUrl";
 import { cn } from "@/utils/cn";
 import {
   Button,
@@ -14,41 +15,38 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { ChangeEvent, Key, ReactNode, useMemo } from "react";
+import { Key, ReactNode, useMemo } from "react";
 import { CiSearch } from "react-icons/ci";
 
 interface DataTableProps<T> {
   columns: Record<string, unknown>[];
   data: T[];
   renderCell: (item: T, columnKey: Key) => ReactNode;
-  onClearSearch: () => void;
-  onChangeSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   buttonTopContentLabel?: string;
   onClickButtonTopContent?: () => void;
-  currentPage: number;
   totalPages?: number;
-  onChangePage: (page: number) => void;
-  limit: string;
-  onChangeLimit: (e: ChangeEvent<HTMLSelectElement>) => void;
   emptyContent: string;
   isLoading?: boolean;
 }
 
 const DataTable = <T,>(props: DataTableProps<T>) => {
   const {
+    currentLimit,
+    currentPage,
+    handleChangePage,
+    handleChangeLimit,
+    handleSearch,
+    handleClearSearch,
+  } = useChangeUrl();
+
+  const {
     columns,
     data,
     emptyContent,
-    limit,
     renderCell,
-    onClearSearch,
-    onChangeSearch,
-    onChangeLimit,
     buttonTopContentLabel,
     onClickButtonTopContent,
     totalPages,
-    onChangePage,
-    currentPage,
     isLoading,
   } = props;
   const resolvedTotalPages = totalPages ?? 0;
@@ -61,8 +59,8 @@ const DataTable = <T,>(props: DataTableProps<T>) => {
           className="w-full sm:max-w-[24%]"
           placeholder="Search by name"
           startContent={<CiSearch />}
-          onClear={onClearSearch}
-          onChange={onChangeSearch}
+          onClear={handleClearSearch}
+          onChange={handleSearch}
         />
         {buttonTopContentLabel && (
           <Button color="danger" onPress={onClickButtonTopContent}>
@@ -73,8 +71,8 @@ const DataTable = <T,>(props: DataTableProps<T>) => {
     );
   }, [
     buttonTopContentLabel,
-    onChangeSearch,
-    onClearSearch,
+    handleSearch,
+    handleClearSearch,
     onClickButtonTopContent,
   ]);
 
@@ -84,9 +82,9 @@ const DataTable = <T,>(props: DataTableProps<T>) => {
         <Select
           className="hidden max-w-36 lg:block"
           size="md"
-          selectedKeys={[limit]}
+          selectedKeys={[`${currentLimit}`]}
           selectionMode="single"
-          onChange={onChangeLimit}
+          onChange={handleChangeLimit}
           startContent={<p className="text-small">Show:</p>}
           disallowEmptySelection
         >
@@ -99,15 +97,21 @@ const DataTable = <T,>(props: DataTableProps<T>) => {
             isCompact
             showControls
             color="danger"
-            page={currentPage}
+            page={Number(currentPage)}
             total={resolvedTotalPages}
-            onChange={onChangePage}
+            onChange={handleChangePage}
             loop
           />
         )}
       </div>
     );
-  }, [limit, currentPage, resolvedTotalPages, onChangeLimit, onChangePage]);
+  }, [
+    currentLimit,
+    currentPage,
+    resolvedTotalPages,
+    handleChangeLimit,
+    handleChangePage,
+  ]);
   return (
     <Table
       topContent={TopContent}

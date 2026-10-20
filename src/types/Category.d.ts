@@ -31,7 +31,7 @@ interface IApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
-  pagination?: IPaginationMeta;
+  meta?: IPaginationMeta;
 }
 
 export type {

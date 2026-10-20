@@ -11,38 +11,37 @@ import Image from "next/image";
 import { Router, useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
-import { COLUMN_LISTS_CATEGORY } from "./Category.constant";
+import { COLUMN_LISTS_CATEGORY } from "./Category.constants";
 import useCategory from "./useCategory";
 import type { ICategory } from "@/types/Category";
 import AddCategoryModal from "./AddCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
+import useChangeUrl from "@/hooks/useChangeUrl";
+import DropDownAction from "@/components/commons/DropdownAction";
 
 const Category = () => {
   const { push, isReady, query } = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   );
   const {
-    setURL,
     dataCategory,
-    currentPage,
-    currentLimit,
-    currentSearch,
-    handleChangePage,
-    handleChangeLimit,
-    handleChangeSearch,
-    handleClearSearch,
     isLoadingCategory,
     isRefetchingCategory,
     refetchCategory,
   } = useCategory();
 
+  const selectedCategory =
+    dataCategory?.data.find(category => category._id === selectedCategoryId) ??
+    null;
+
   const addCategoryModal = useDisclosure();
   const deleteCategoryModal = useDisclosure();
+  const { setUrl } = useChangeUrl();
 
   useEffect(() => {
     if (isReady) {
-      setURL();
+      setUrl();
     }
   }, [isReady]);
 
@@ -58,7 +57,7 @@ const Category = () => {
               alt="Icon"
               width={100}
               height={100}
-              className="h-15 w-15 rounded-md object-cover" 
+              className="h-15 w-15 rounded-md object-cover"
               // di atas buat ubah ukuran
             />
           ) : (
@@ -68,31 +67,15 @@ const Category = () => {
           );
         case "actions":
           return (
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <CiMenuKebab className="text-default-700" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem
-                  key="detail-category-button"
-                  onPress={() => push(`/admin/category/${category._id}`)}
-                >
-                  Detail Category
-                </DropdownItem>
-                <DropdownItem
-                  key="delete-category"
-                  className="text-danger-500"
-                  onPress={() => {
-                    setSelectedCategory(category);
-                    deleteCategoryModal.onOpen();
-                  }}
-                >
-                  Delete
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <DropDownAction
+              onPressButtonDetail={() =>
+                push(`/admin/category/${category._id}`)
+              }
+              onPressButtonDelete={() => {
+                setSelectedCategoryId(category._id);
+                deleteCategoryModal.onOpen();
+              }}
+            />
           );
         default:
           return cellValue as ReactNode;
@@ -106,18 +89,12 @@ const Category = () => {
         <DataTable
           buttonTopContentLabel="Create Category"
           columns={COLUMN_LISTS_CATEGORY}
-          currentPage={Number(currentPage)}
           data={dataCategory?.data || []}
           emptyContent="Category is empty"
           isLoading={isLoadingCategory || isRefetchingCategory}
-          limit={String(currentLimit)}
-          onChangeLimit={handleChangeLimit}
-          onChangePage={handleChangePage}
-          onChangeSearch={handleChangeSearch}
-          onClearSearch={handleClearSearch}
           renderCell={renderCell}
           onClickButtonTopContent={addCategoryModal.onOpen}
-          totalPages={dataCategory?.pagination?.totalPages}
+          totalPages={dataCategory?.meta?.totalPages}
         />
       )}
       <AddCategoryModal
