@@ -6,7 +6,6 @@ import * as yup from "yup";
 import ticketServices from "@/services/ticket.service";
 import type { ICreateTicket } from "@/types/Ticket";
 import {
-  ApiErrorBody,
   extractErrorField,
   extractErrorMessage,
 } from "@/utils/api-error";

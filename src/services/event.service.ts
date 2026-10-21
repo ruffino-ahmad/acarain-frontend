@@ -1,7 +1,7 @@
 import instance from "@/libs/axios/instance";
-import type { IApiResponse } from "@/types/Category";
 import type { ICreateEvent, IEvent, IUpdateEvent } from "@/types/Event";
 import endpoint from "./endpoint.constant";
+import { IApiResponse } from "@/types/Pagination";
 
 const eventServices = {
   getEvents: (params?: string) => {

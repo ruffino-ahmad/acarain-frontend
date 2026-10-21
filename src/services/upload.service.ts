@@ -1,12 +1,12 @@
 import instance from "@/libs/axios/instance";
 import endpoint from "./endpoint.constant";
-import type { IApiResponse } from "@/types/Category";
 import type {
   IConfirmUpload,
   IRequestUploadUrl,
   IRequestUploadUrlResponse,
   UploadFolder,
 } from "@/types/Upload";
+import { IApiResponse } from "@/types/Pagination";
 
 const putToBlob = async (uploadUrl: string, file: File): Promise<void> => {
   const response = await fetch(uploadUrl, {

@@ -1,7 +1,7 @@
 import instance from "@/libs/axios/instance";
-import type { IApiResponse } from "@/types/Category";
 import type { IProvinceDetail, IRegion } from "@/types/Region";
 import endpoint from "./endpoint.constant";
+import { IApiResponse } from "@/types/Pagination";
 
 const regionServices = {
   getProvinces: () => {

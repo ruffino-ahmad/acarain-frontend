@@ -14,8 +14,6 @@ interface ICreateCategory {
   icon: string;
 }
 
-type IUpdateCategory = Partial<
-  Pick<ICreateCategory, "name" | "description" | "icon">
->;
+type IUpdateCategory = Partial<Pick<ICreateCategory>>;
 
 export type { ICategory, ICreateCategory, IUpdateCategory };

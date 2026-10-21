@@ -1,11 +1,11 @@
 import instance from "@/libs/axios/instance";
 import endpoint from "./endpoint.constant";
 import type {
-  IApiResponse,
   ICategory,
   ICreateCategory,
   IUpdateCategory,
 } from "@/types/Category";
+import { IApiResponse } from "@/types/Pagination";
 
 const categoryServices = {
   getCategories: (params?: string) => {
