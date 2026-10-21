@@ -1,8 +1,7 @@
 import instance from "@/libs/axios/instance";
 import endpoint from "./endpoint.constant";
 import { IApiResponse } from "@/types/Pagination";
-import { ITicket } from "@/types/Ticket";
-import { ICreateEvent, IUpdateEvent } from "@/types/Event";
+import { ICreateTicket, ITicket, IUpdateTicket } from "@/types/Ticket";
 
 const ticketServices = {
   getTicketByEventId: (id: string) => {
@@ -10,10 +9,10 @@ const ticketServices = {
       `${endpoint.TICKET}/${id}/events`
     );
   },
-  createTicket: (payload: ICreateEvent) => {
+  createTicket: (payload: ICreateTicket) => {
     return instance.post<IApiResponse<ITicket[]>>(endpoint.TICKET, payload);
   },
-  updateTicket: (id: string, payload: IUpdateEvent) => {
+  updateTicket: (id: string, payload: IUpdateTicket) => {
     return instance.patch<IApiResponse<ITicket[]>>(
       `${endpoint.TICKET}/${id}`,
       payload

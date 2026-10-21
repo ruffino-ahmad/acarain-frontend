@@ -12,59 +12,73 @@ import {
 import { Key, ReactNode, useCallback } from "react";
 import { COLUMN_LISTS_TICKET } from "./TicketTab.constants";
 import useTicketTab from "./useTicketTab";
+import AddTicketModal from "./AddTicketModal";
 
 const TicketTab = () => {
-  const { dataTicket, isLoadingTicket, isRefetchingTicket } =
-    useTicketTab();
-  const addTickeyModal = useDisclosure();
+  const addTicketModal = useDisclosure();
   const deleteTicketModal = useDisclosure();
   const updateTicketModal = useDisclosure();
 
-  const renderCell = useCallback((ticket: ITicket, columnKey: Key) => {
-    const cellValue = ticket[columnKey as keyof typeof ticket];
+  const { dataTicket, isLoadingTicket, isRefetchingTicket, refetchTicket, id } =
+    useTicketTab();
 
-    switch (columnKey) {
-      case "price":
-        return `${convertToRupiah(Number(cellValue))}`;
-      case "actions":
-        return (
-          <DropDownAction
-            onPressButtonDetail={() => {
-              updateTicketModal.onOpen();
-            }}
-            onPressButtonDelete={() => {
-              deleteTicketModal.onOpen();
-            }}
-          />
-        );
-      default:
-        return cellValue as ReactNode;
-    }
-  }, []);
+  const renderCell = useCallback(
+    (ticket: ITicket, columnKey: Key) => {
+      const cellValue = ticket[columnKey as keyof typeof ticket];
+
+      switch (columnKey) {
+        case "price":
+          return `${convertToRupiah(Number(cellValue))}`;
+        case "actions":
+          return (
+            <DropDownAction
+              onPressButtonDetail={() => {
+                updateTicketModal.onOpen();
+              }}
+              onPressButtonDelete={() => {
+                deleteTicketModal.onOpen();
+              }}
+            />
+          );
+        default:
+          return cellValue as ReactNode;
+      }
+    },
+    [deleteTicketModal, updateTicketModal]
+  );
   return (
-    <Card className="w-full p-4">
-      <CardHeader className="items-center justify-between">
-        <div className="flex flex-col items-center">
-          <h1 className="w-full text-xl font-bold">Event Tickets</h1>
-          <p className="text-default-400 text-small w-full">
-            Manage tickets for the event
-          </p>
-        </div>
-        <Button color="danger">Add New Ticket</Button>
-      </CardHeader>
-      <CardBody className="pt-0">
-        <DataTable
-          columns={COLUMN_LISTS_TICKET}
-          data={dataTicket || []}
-          emptyContent="Ticket is empty"
-          isLoading={isLoadingTicket || isRefetchingTicket}
-          renderCell={renderCell}
-          totalPages={1}
-          showSearch={false}
-          showLimit={false}
-        />
-      </CardBody>
-    </Card>
+    <>
+      <Card className="w-full p-4">
+        <CardHeader className="items-center justify-between">
+          <div className="flex flex-col items-center">
+            <h1 className="w-full text-xl font-bold">Event Tickets</h1>
+            <p className="text-default-400 text-small w-full">
+              Manage tickets for the event
+            </p>
+          </div>
+          <Button color="danger" onPress={addTicketModal.onOpen}>
+            Add New Ticket
+          </Button>
+        </CardHeader>
+        <CardBody className="pt-0">
+          <DataTable
+            columns={COLUMN_LISTS_TICKET}
+            data={dataTicket || []}
+            emptyContent="Ticket is empty"
+            isLoading={isLoadingTicket || isRefetchingTicket}
+            renderCell={renderCell}
+            totalPages={1}
+            showSearch={false}
+            showLimit={false}
+          />
+        </CardBody>
+      </Card>
+      <AddTicketModal
+        eventId={id}
+        refetchTicket={refetchTicket}
+        {...addTicketModal}
+      />
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
-import ticketServices from "@/services/ticket.service";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+
+import ticketServices from "@/services/ticket.service";
 
 const useTicketTab = () => {
   const { query, isReady } = useRouter();
@@ -14,6 +15,7 @@ const useTicketTab = () => {
     data: dataTicket,
     isLoading: isLoadingTicket,
     isRefetching: isRefetchingTicket,
+    refetch: refetchTicket,
   } = useQuery({
     queryKey: ["Ticket", query.id],
     queryFn: () => getTicketByEventId(`${query.id}`),
@@ -24,6 +26,8 @@ const useTicketTab = () => {
     dataTicket,
     isLoadingTicket,
     isRefetchingTicket,
+    refetchTicket,
+    id: query.id as string,
   };
 };
 

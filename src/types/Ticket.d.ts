@@ -18,11 +18,9 @@ interface ICreateTicket {
   description: string;
   price: number;
   quantity: number;
-  events: ITicketEvent | null;
+  events: string;
 }
 
-type IUpdateTicket = Partial<
-  Pick<ICreateTicket, "name" | "description" | "price" | "quantity" | "events">
->;
+type IUpdateTicket = Partial<Pick<ICreateTicket>>;
 
 export type { ICreateTicket, IUpdateTicket, ITicket, ITicketEvent };
