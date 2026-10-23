@@ -1,17 +1,11 @@
 import DataTable from "@/components/ui/DataTable";
 import {
-  Button,
   Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   useDisclosure,
 } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect, useState } from "react";
-import { CiMenuKebab } from "react-icons/ci";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import type { IEvent } from "@/types/Event";
