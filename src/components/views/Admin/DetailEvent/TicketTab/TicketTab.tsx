@@ -14,6 +14,7 @@ import { COLUMN_LISTS_TICKET } from "./TicketTab.constants";
 import useTicketTab from "./useTicketTab";
 import AddTicketModal from "./AddTicketModal";
 import DeleteTicketModal from "./DeleteTicketModal";
+import UpdateTicketModal from "./UpdateTicketModal";
 
 const TicketTab = () => {
   const addTicketModal = useDisclosure();
@@ -39,6 +40,7 @@ const TicketTab = () => {
           return (
             <DropDownAction
               onPressButtonDetail={() => {
+                setSelectedTicketId(ticket._id);
                 updateTicketModal.onOpen();
               }}
               onPressButtonDelete={() => {
@@ -87,6 +89,11 @@ const TicketTab = () => {
       />
       <DeleteTicketModal
         {...deleteTicketModal}
+        refetchTicket={refetchTicket}
+        selectedTicket={selectedTicket}
+      />
+      <UpdateTicketModal
+        {...updateTicketModal}
         refetchTicket={refetchTicket}
         selectedTicket={selectedTicket}
       />
