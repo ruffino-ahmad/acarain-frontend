@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -9,7 +8,7 @@ import categoryServices from "@/services/category.service";
 import uploadServices from "@/services/upload.service";
 import type { UploadMimeType } from "@/types/Upload";
 import toast from "@/utils/toast";
-import { ApiErrorBody, extractErrorMessage } from "@/utils/api-error";
+import { extractErrorField, extractErrorMessage } from "@/utils/api-error";
 
 const ALLOWED_MIME_TYPES: UploadMimeType[] = [
   "image/jpeg",
@@ -125,10 +124,7 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
     onError(error) {
       toast.error(extractErrorMessage(error));
 
-      const details = (error as AxiosError<ApiErrorBody>)?.response?.data?.data;
-      if (!Array.isArray(details)) return;
-
-      details.forEach(detail => {
+      extractErrorField(error).forEach(detail => {
         if (!detail.field) return;
         setError(detail.field as keyof FormDataAddCategory, {
           message: detail.message,

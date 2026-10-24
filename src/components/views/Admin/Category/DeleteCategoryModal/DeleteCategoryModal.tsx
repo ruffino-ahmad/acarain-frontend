@@ -12,14 +12,6 @@ import {
 } from "@heroui/react";
 import useDeleteCategoryModal from "./useDeleteCategoryModal";
 import { ICategory } from "@/types/Category";
-
-interface DeleteCategoryModalProps {
-  isOpen: boolean;
-  onOpenChange: (isOpen?: boolean) => void;
-  onClose: () => void;
-  refetchCategory: () => void;
-}
-
 interface DeleteCategoryModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen?: boolean) => void;

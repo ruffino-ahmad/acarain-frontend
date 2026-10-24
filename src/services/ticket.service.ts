@@ -10,16 +10,16 @@ const ticketServices = {
     );
   },
   createTicket: (payload: ICreateTicket) => {
-    return instance.post<IApiResponse<ITicket[]>>(endpoint.TICKET, payload);
+    return instance.post<IApiResponse<ITicket>>(endpoint.TICKET, payload);
   },
   updateTicket: (id: string, payload: IUpdateTicket) => {
-    return instance.patch<IApiResponse<ITicket[]>>(
+    return instance.patch<IApiResponse<ITicket>>(
       `${endpoint.TICKET}/${id}`,
       payload
     );
   },
   deleteTicket: (id: string) => {
-    return instance.delete<IApiResponse<ITicket[]>>(`${endpoint.TICKET}/${id}`);
+    return instance.delete<IApiResponse<ITicket>>(`${endpoint.TICKET}/${id}`);
   },
 };
 

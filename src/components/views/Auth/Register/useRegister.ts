@@ -6,6 +6,7 @@ import { IRegister } from "@/types/Auth";
 import authServices from "@/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { extractErrorMessage } from "@/utils/api-error";
 import toast from "@/utils/toast";
 
 const registerSchema = yup.object().shape({
@@ -57,7 +58,7 @@ const useRegister = () => {
   const { mutate: mutateRegister, isPending: isPendingRegister } = useMutation({
     mutationFn: registerService,
     onError(error) {
-      toast.error(error.message);
+      toast.error(extractErrorMessage(error));
     },
     onSuccess: () => {
       reset();
