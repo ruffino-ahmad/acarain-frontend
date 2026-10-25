@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import uploadServices from "@/services/upload.service";
 import type { UploadMimeType } from "@/types/Upload";
 import { extractErrorMessage } from "@/utils/api-error";
-import toast from "@/utils/toast";
 import useUpdateCategory from "../useUpdateCategory";
 
 const ALLOWED_MIME_TYPES: UploadMimeType[] = [
@@ -29,8 +28,11 @@ const useIconTab = (props: UseIconTabProps) => {
   const pendingBlobRef = useRef<string | null>(null);
   const isCommittedRef = useRef(false);
 
-  const { mutateUpdateCategory, isPendingUpdateCategory } =
-    useUpdateCategory(id);
+  const {
+    mutateUpdateCategory,
+    isPendingUpdateCategory,
+    errorMessage,
+  } = useUpdateCategory(id);
 
   const applyPreview = useCallback((file: File | null) => {
     if (previewUrlRef.current) {
@@ -78,7 +80,7 @@ const useIconTab = (props: UseIconTabProps) => {
       setIconError(undefined);
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setIconError(extractErrorMessage(error));
     },
   });
 
@@ -126,6 +128,7 @@ const useIconTab = (props: UseIconTabProps) => {
     pendingBlob,
     isUploadingIcon: uploadIconMutation.isPending,
     isPendingUpdateCategory,
+    errorMessage,
     handleUploadIcon,
     handleSaveIcon,
     handleCancelSelection,

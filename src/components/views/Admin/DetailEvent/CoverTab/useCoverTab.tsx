@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import uploadServices from "@/services/upload.service";
 import type { UploadMimeType } from "@/types/Upload";
 import { extractErrorMessage } from "@/utils/api-error";
-import toast from "@/utils/toast";
 import useUpdateEvent from "../useUpdateEvent";
 
 const ALLOWED_MIME_TYPES: UploadMimeType[] = [
@@ -81,7 +80,7 @@ const useCoverTab = (props: UseCoverTabProps) => {
       setCoverError(undefined);
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setCoverError(extractErrorMessage(error));
     },
   });
 

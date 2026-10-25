@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import InputFile from "@/components/ui/InputFile";
 import { Card, CardBody, CardHeader, Skeleton, Button } from "@heroui/react";
 import Image from "next/image";
@@ -19,6 +20,7 @@ const IconTab = (props: IconTabProps) => {
     pendingBlob,
     isUploadingIcon,
     isPendingUpdateCategory,
+    errorMessage,
     handleUploadIcon,
     handleSaveIcon,
     handleCancelSelection,
@@ -40,6 +42,10 @@ const IconTab = (props: IconTabProps) => {
             handleSaveIcon();
           }}
         >
+          <InlineErrorAlert
+            title="Unable to update category icon"
+            message={errorMessage}
+          />
           <div className="flex flex-col gap-2">
             <p className="text-default-700 text-sm font-medium">Current Icon</p>
             <Skeleton

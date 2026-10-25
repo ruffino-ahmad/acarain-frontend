@@ -42,8 +42,11 @@ const useInfoTab = (props: UseInfoTabProps) => {
     },
   });
 
-  const { mutateUpdateCategory, isPendingUpdateCategory } =
-    useUpdateCategory(id);
+  const {
+    mutateUpdateCategory,
+    isPendingUpdateCategory,
+    errorMessage,
+  } = useUpdateCategory(id);
 
   useEffect(() => {
     reset({
@@ -70,6 +73,7 @@ const useInfoTab = (props: UseInfoTabProps) => {
     isDirty,
     handleSaveInfo,
     isPendingUpdateCategory,
+    errorMessage,
   };
 };
 

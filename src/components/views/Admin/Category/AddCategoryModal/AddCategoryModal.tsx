@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import InputFile from "@/components/ui/InputFile";
 import {
   Button,
@@ -27,6 +28,7 @@ const AddCategoryModal = (props: AddCategoryModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddCategory,
     handleClose,
     handleUploadIcon,
@@ -60,6 +62,10 @@ const AddCategoryModal = (props: AddCategoryModalProps) => {
           <ModalHeader>Add Category</ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-2">
+              <InlineErrorAlert
+                title="Unable to create category"
+                message={formError}
+              />
               <p className="text-sm font-bold">Information</p>
               <Controller
                 name="name"

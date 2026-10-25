@@ -165,7 +165,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
       setValue("banner", blobName, { shouldValidate: true });
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setError("banner", { message: extractErrorMessage(error) });
     },
   });
 

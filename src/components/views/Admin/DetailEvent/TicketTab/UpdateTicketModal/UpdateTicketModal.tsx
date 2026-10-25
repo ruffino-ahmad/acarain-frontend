@@ -1,3 +1,5 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
+import type { ITicket } from "@/types/Ticket";
 import {
   Button,
   Input,
@@ -11,7 +13,6 @@ import {
 } from "@heroui/react";
 import { Controller } from "react-hook-form";
 
-import type { ITicket } from "@/types/Ticket";
 import useUpdateTicketModal from "./useUpdateTicketModal";
 
 interface UpdateTicketModalProps {
@@ -30,6 +31,7 @@ const UpdateTicketModal = (props: UpdateTicketModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleUpdateTicket,
     handleClose,
     isPendingMutateUpdateTicket,
@@ -55,6 +57,10 @@ const UpdateTicketModal = (props: UpdateTicketModalProps) => {
           <ModalHeader>Update Ticket</ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-4">
+              <InlineErrorAlert
+                title="Unable to update ticket"
+                message={formError}
+              />
               <p className="text-sm font-bold">Information</p>
               <div className="flex flex-col gap-4">
                 <Controller

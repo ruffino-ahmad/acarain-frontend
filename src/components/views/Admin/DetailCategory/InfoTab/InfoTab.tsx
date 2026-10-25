@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import type { ICategory } from "@/types/Category";
 import {
   Button,
@@ -28,6 +29,7 @@ const InfoTab = (props: InfoTabProps) => {
     isDirty,
     handleSaveInfo,
     isPendingUpdateCategory,
+    errorMessage,
   } = useInfoTab({ dataCategory, id });
 
   return (
@@ -43,6 +45,10 @@ const InfoTab = (props: InfoTabProps) => {
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleSaveInfo)}
         >
+          <InlineErrorAlert
+            title="Unable to update category"
+            message={errorMessage}
+          />
           <Skeleton isLoaded={!isLoading} className="rounded-lg">
             <Controller
               name="name"

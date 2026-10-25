@@ -11,6 +11,7 @@ import {
 } from "@heroui/react";
 import { Controller } from "react-hook-form";
 
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import InputFile from "@/components/ui/InputFile";
 
 import useAddBannerModal from "./useAddBannerModal";
@@ -29,6 +30,7 @@ const AddBannerModal = (props: AddBannerModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddBanner,
     handleClose,
     handleUploadImage,
@@ -62,6 +64,10 @@ const AddBannerModal = (props: AddBannerModalProps) => {
           <ModalHeader>Add Banner</ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-2">
+              <InlineErrorAlert
+                title="Unable to create banner"
+                message={formError}
+              />
               <p className="text-sm font-bold">Information</p>
               <Controller
                 name="title"

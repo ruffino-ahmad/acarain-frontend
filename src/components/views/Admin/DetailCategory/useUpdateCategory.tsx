@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import categoryServices from "@/services/category.service";
@@ -7,6 +9,7 @@ import toast from "@/utils/toast";
 
 const useUpdateCategory = (id: string) => {
   const queryClient = useQueryClient();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     mutate: mutateUpdateCategory,
@@ -14,16 +17,20 @@ const useUpdateCategory = (id: string) => {
   } = useMutation({
     mutationFn: (payload: IUpdateCategory) =>
       categoryServices.updateCategory(id, payload),
+    onMutate() {
+      setErrorMessage(null);
+    },
     onSuccess() {
+      setErrorMessage(null);
       toast.success("Category updated successfully");
       queryClient.invalidateQueries({ queryKey: ["Category"] });
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setErrorMessage(extractErrorMessage(error));
     },
   });
 
-  return { mutateUpdateCategory, isPendingUpdateCategory };
+  return { mutateUpdateCategory, isPendingUpdateCategory, errorMessage };
 };
 
 export default useUpdateCategory;

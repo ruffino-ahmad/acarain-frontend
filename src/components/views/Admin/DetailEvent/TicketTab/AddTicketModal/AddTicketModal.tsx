@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import {
   Button,
   Input,
@@ -27,6 +28,7 @@ const AddTicketModal = (props: AddTicketModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddTicket,
     handleClose,
     isPendingMutateAddTicket,
@@ -52,6 +54,10 @@ const AddTicketModal = (props: AddTicketModalProps) => {
           <ModalHeader>Add Ticket</ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-4">
+              <InlineErrorAlert
+                title="Unable to create ticket"
+                message={formError}
+              />
               <p className="text-sm font-bold">Information</p>
               <div className="flex flex-col gap-4">
                 <Controller

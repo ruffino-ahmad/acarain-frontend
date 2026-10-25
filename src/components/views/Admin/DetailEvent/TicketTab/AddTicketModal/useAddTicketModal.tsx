@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -52,11 +53,13 @@ interface UseAddTicketModalProps {
 
 const useAddTicketModal = (props: UseAddTicketModalProps) => {
   const { eventId, onClose, refetchTicket } = props;
+  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     control,
     handleSubmit,
     reset,
+    clearErrors,
     setError,
     formState: { errors },
   } = useForm<FormDataAddTicket>({
@@ -81,31 +84,44 @@ const useAddTicketModal = (props: UseAddTicketModalProps) => {
         };
         return ticketServices.createTicket(payload);
       },
+      onMutate() {
+        setFormError(null);
+      },
       onSuccess() {
+        setFormError(null);
         toast.success("Ticket created successfully");
         reset();
         onClose();
         refetchTicket();
       },
       onError(error) {
-        toast.error(extractErrorMessage(error));
+        const details = extractErrorField(error);
 
-        extractErrorField(error).forEach(detail => {
-          if (!detail.field) {
-            return;
-          }
-          setError(detail.field as keyof FormDataAddTicket, {
-            message: detail.message,
+        if (details.length > 0) {
+          setFormError(null);
+          details.forEach(detail => {
+            if (!detail.field) {
+              return;
+            }
+            setError(detail.field as keyof FormDataAddTicket, {
+              message: detail.message,
+            });
           });
-        });
+          return;
+        }
+
+        setFormError(extractErrorMessage(error));
       },
     });
 
   const handleAddTicket = (data: FormDataAddTicket) => {
+    clearErrors();
+    setFormError(null);
     mutateAddTicket(data);
   };
 
   const handleClose = () => {
+    setFormError(null);
     reset();
     onClose();
   };
@@ -114,6 +130,7 @@ const useAddTicketModal = (props: UseAddTicketModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddTicket,
     handleClose,
     isPendingMutateAddTicket,

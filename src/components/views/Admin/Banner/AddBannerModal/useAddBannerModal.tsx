@@ -34,6 +34,7 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
   const { onClose, refetchBanner } = props;
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const previewUrlRef = useRef<string | null>(null);
   const uploadedBlobRef = useRef<string | null>(null);
   const isCommittedRef = useRef(false);
@@ -86,7 +87,7 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
       setValue("image", blobName, { shouldValidate: true, shouldDirty: true });
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setError("image", { message: extractErrorMessage(error) });
     },
   });
 
@@ -111,9 +112,13 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
         isShow: payload.isShow,
         image: payload.image,
       }),
+    onMutate() {
+      setFormError(null);
+    },
     onSuccess() {
       isCommittedRef.current = true;
       uploadedBlobRef.current = null;
+      setFormError(null);
       toast.success("Banner created successfully");
       reset();
       applyPreview(null);
@@ -121,14 +126,20 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
       refetchBanner();
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      const details = extractErrorField(error);
 
-      extractErrorField(error).forEach(detail => {
-        if (!detail.field) return;
-        setError(detail.field as keyof FormDataAddBanner, {
-          message: detail.message,
+      if (details.length > 0) {
+        setFormError(null);
+        details.forEach(detail => {
+          if (!detail.field) return;
+          setError(detail.field as keyof FormDataAddBanner, {
+            message: detail.message,
+          });
         });
-      });
+        return;
+      }
+
+      setFormError(extractErrorMessage(error));
     },
   });
 
@@ -156,6 +167,8 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
   };
 
   const handleAddBanner = (data: FormDataAddBanner) => {
+    clearErrors();
+    setFormError(null);
     createBannerMutation.mutate(data);
   };
 
@@ -166,6 +179,7 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
       uploadServices.deleteBlob(pending).catch(() => undefined);
     }
 
+    setFormError(null);
     reset();
     applyPreview(null);
     onClose();
@@ -175,6 +189,7 @@ const useAddBannerModal = (props: UseAddBannerModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddBanner,
     handleClose,
     handleUploadImage,

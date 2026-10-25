@@ -25,7 +25,6 @@ const schema = yup.object({
 
 export type FormDataAddCategory = yup.InferType<typeof schema>;
 
-
 interface UseAddCategoryModalProps {
   onClose: () => void;
   refetchCategory: () => void;
@@ -35,6 +34,7 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
   const { onClose, refetchCategory } = props;
 
   const [iconPreview, setIconPreview] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const previewUrlRef = useRef<string | null>(null);
   const uploadedBlobRef = useRef<string | null>(null);
   const isCommittedRef = useRef(false);
@@ -87,7 +87,7 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
       setValue("icon", blobName, { shouldValidate: true, shouldDirty: true });
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setError("icon", { message: extractErrorMessage(error) });
     },
   });
 
@@ -112,9 +112,13 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
         description: payload.description,
         icon: payload.icon,
       }),
+    onMutate() {
+      setFormError(null);
+    },
     onSuccess() {
       isCommittedRef.current = true;
       uploadedBlobRef.current = null;
+      setFormError(null);
       toast.success("Category created successfully");
       reset();
       applyPreview(null);
@@ -122,14 +126,20 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
       refetchCategory();
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      const details = extractErrorField(error);
 
-      extractErrorField(error).forEach(detail => {
-        if (!detail.field) return;
-        setError(detail.field as keyof FormDataAddCategory, {
-          message: detail.message,
+      if (details.length > 0) {
+        setFormError(null);
+        details.forEach(detail => {
+          if (!detail.field) return;
+          setError(detail.field as keyof FormDataAddCategory, {
+            message: detail.message,
+          });
         });
-      });
+        return;
+      }
+
+      setFormError(extractErrorMessage(error));
     },
   });
 
@@ -157,6 +167,8 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
   };
 
   const handleAddCategory = (data: FormDataAddCategory) => {
+    clearErrors();
+    setFormError(null);
     createCategoryMutation.mutate(data);
   };
 
@@ -167,6 +179,7 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
       uploadServices.deleteBlob(pending).catch(() => undefined);
     }
 
+    setFormError(null);
     reset();
     applyPreview(null);
     onClose();
@@ -176,6 +189,7 @@ const useAddCategoryModal = (props: UseAddCategoryModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddCategory,
     handleClose,
     handleUploadIcon,

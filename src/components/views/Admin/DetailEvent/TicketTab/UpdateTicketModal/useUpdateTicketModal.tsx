@@ -7,7 +7,7 @@ import ticketServices from "@/services/ticket.service";
 import type { ITicket, IUpdateTicket } from "@/types/Ticket";
 import { extractErrorField, extractErrorMessage } from "@/utils/api-error";
 import toast from "@/utils/toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const schema = yup.object({
   name: yup
@@ -58,11 +58,13 @@ interface UseUpdateTicketModalProps {
 
 const useUpdateTicketModal = (props: UseUpdateTicketModalProps) => {
   const { isOpen, onClose, refetchTicket, selectedTicket } = props;
+  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     control,
     handleSubmit,
     reset,
+    clearErrors,
     setError,
     formState: { errors },
   } = useForm<FormDataUpdateTicket>({
@@ -73,6 +75,7 @@ const useUpdateTicketModal = (props: UseUpdateTicketModalProps) => {
   useEffect(() => {
     if (isOpen) {
       reset(getDefaultValues(selectedTicket));
+      setFormError(null);
     }
   }, [isOpen, selectedTicket, reset]);
 
@@ -91,30 +94,43 @@ const useUpdateTicketModal = (props: UseUpdateTicketModalProps) => {
         };
         return ticketServices.updateTicket(selectedTicket._id, payload);
       },
+      onMutate() {
+        setFormError(null);
+      },
       onSuccess() {
+        setFormError(null);
         toast.success("Ticket updated successfully");
         onClose();
         refetchTicket();
       },
       onError(error) {
-        toast.error(extractErrorMessage(error));
+        const details = extractErrorField(error);
 
-        extractErrorField(error).forEach(detail => {
-          if (!detail.field) {
-            return;
-          }
-          setError(detail.field as keyof FormDataUpdateTicket, {
-            message: detail.message,
+        if (details.length > 0) {
+          setFormError(null);
+          details.forEach(detail => {
+            if (!detail.field) {
+              return;
+            }
+            setError(detail.field as keyof FormDataUpdateTicket, {
+              message: detail.message,
+            });
           });
-        });
+          return;
+        }
+
+        setFormError(extractErrorMessage(error));
       },
     });
 
   const handleUpdateTicket = (data: FormDataUpdateTicket) => {
+    clearErrors();
+    setFormError(null);
     mutateUpdateTicket(data);
   };
 
   const handleClose = () => {
+    setFormError(null);
     reset(getDefaultValues(selectedTicket));
     onClose();
   };
@@ -123,6 +139,7 @@ const useUpdateTicketModal = (props: UseUpdateTicketModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleUpdateTicket,
     handleClose,
     isPendingMutateUpdateTicket,
