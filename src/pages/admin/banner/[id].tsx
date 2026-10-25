@@ -1,5 +1,5 @@
 import DashboardLayout from "@/components/layouts/DashboardLayout";
-import DetailCategory from "@/components/views/Admin/DetailCategory";
+import DetailBanner from "@/components/views/Admin/DetailBaner";
 
 const AdminDetailBannerPage = () => {
   return (
@@ -8,7 +8,7 @@ const AdminDetailBannerPage = () => {
       description="Manage banner details, including viewing and editing banner information."
       type="admin"
     >
-      <DetailCategory />
+      <DetailBanner />
     </DashboardLayout>
   );
 };
