@@ -44,14 +44,14 @@ const IconTab = (props: IconTabProps) => {
             <p className="text-default-700 text-sm font-medium">Current Icon</p>
             <Skeleton
               isLoaded={!isLoading}
-              className="aspect-square rounded-lg"
+              className="relative mx-auto aspect-square w-full max-w-96 rounded-lg"
             >
               {currentIconUrl ? (
                 <Image
                   src={currentIconUrl}
                   alt="Category icon"
                   fill
-                  sizes="256px"
+                  sizes="384px"
                   className="object-contain"
                 />
               ) : (
@@ -71,15 +71,14 @@ const IconTab = (props: IconTabProps) => {
             isUploading={isUploadingIcon}
             isInvalid={iconError !== undefined}
             errorMessage={iconError}
+            previewClassName="mx-auto aspect-square w-full max-w-40 object-contain"
           />
           <Button
             color="danger"
             className="disabled:bg-default-500"
             type="submit"
             isDisabled={
-              !pendingBlob ||
-              isPendingUpdateCategory ||
-              isUploadingIcon
+              !pendingBlob || isPendingUpdateCategory || isUploadingIcon
             }
           >
             {isPendingUpdateCategory ? "Saving..." : "Save Changes"}

@@ -103,6 +103,7 @@ const AddBannerModal = (props: AddBannerModalProps) => {
                 isDeleting={isDeletingImage}
                 isInvalid={errors.image !== undefined}
                 errorMessage={errors.image?.message}
+                previewClassName="aspect-video w-full max-w-md object-cover"
               />
             </div>
           </ModalBody>

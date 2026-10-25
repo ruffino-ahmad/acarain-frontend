@@ -49,13 +49,13 @@ const Category = () => {
             <Image
               src={`${cellValue}`}
               alt="Icon"
-              width={100}
-              height={100}
-              className="h-15 w-15 rounded-md object-cover"
+              width={64}
+              height={64}
+              className="bg-default-50 h-16 w-16 rounded-md object-contain p-1"
               // di atas buat ubah ukuran
             />
           ) : (
-            <div className="bg-default-100 text-default-500 flex h-12 w-12 items-center justify-center rounded-md text-xs font-semibold uppercase">
+            <div className="bg-default-100 text-default-500 flex h-16 w-16 items-center justify-center rounded-md text-xs font-semibold uppercase">
               {String(category.name ?? "?").slice(0, 2)}
             </div>
           );

@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import InputFile from "@/components/ui/InputFile";
 import { Button, Card, CardBody, CardHeader, Skeleton } from "@heroui/react";
 import Image from "next/image";
@@ -19,6 +20,7 @@ const CoverTab = (props: CoverTabProps) => {
     pendingBlob,
     isUploadingCover,
     isPendingUpdateEvent,
+    errorMessage,
     handleUploadCover,
     handleSaveCover,
     handleCancelSelection,
@@ -40,6 +42,10 @@ const CoverTab = (props: CoverTabProps) => {
             handleSaveCover();
           }}
         >
+          <InlineErrorAlert
+            title="Unable to update event cover"
+            message={errorMessage}
+          />
           <div className="flex flex-col gap-2">
             <p className="text-default-700 text-sm font-medium">
               Current Cover
@@ -73,6 +79,7 @@ const CoverTab = (props: CoverTabProps) => {
             isUploading={isUploadingCover}
             isInvalid={coverError !== undefined}
             errorMessage={coverError}
+            previewClassName="aspect-video w-full max-w-md object-cover"
           />
           <Button
             color="danger"

@@ -29,6 +29,7 @@ const useLogin = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    clearErrors,
     setError,
   } = useForm({
     resolver: yupResolver(loginSchema),
@@ -49,7 +50,9 @@ const useLogin = () => {
   const { mutate: mutateLogin, isPending: isPendingLogin } = useMutation({
     mutationFn: loginService,
     onError(error) {
-      toast.error(error.message);
+      setError("root", {
+        message: error.message || "Unable to login. Please try again.",
+      });
     },
     onSuccess: () => {
       reset();
@@ -59,6 +62,7 @@ const useLogin = () => {
   });
 
   const handleLogin = (data: ILogin) => {
+    clearErrors("root");
     return mutateLogin(data);
   };
 

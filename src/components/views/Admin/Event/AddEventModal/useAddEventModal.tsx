@@ -67,6 +67,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
   const { onClose, refetchEvent } = props;
 
   const [bannerPreview, setBannerPreview] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const previewUrlRef = useRef<string | null>(null);
   const uploadedBlobRef = useRef<string | null>(null);
 
@@ -258,8 +259,12 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
   const { mutate: mutateAddEvent, isPending: isPendingMutateAddEvent } =
     useMutation({
       mutationFn: addEventService,
+      onMutate() {
+        setFormError(null);
+      },
       onSuccess() {
         uploadedBlobRef.current = null;
+        setFormError(null);
         toast.success("Event created successfully");
         resetRegionSearch();
         reset();
@@ -268,24 +273,33 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
         refetchEvent();
       },
       onError(error) {
-        toast.error(extractErrorMessage(error));
+        const details = extractErrorField(error);
 
-        extractErrorField(error).forEach(detail => {
-          if (!detail.field) return;
-          setError(detail.field as keyof FormDataAddEvent, {
-            message: detail.message,
+        if (details.length > 0) {
+          setFormError(null);
+          details.forEach(detail => {
+            if (!detail.field) return;
+            setError(detail.field as keyof FormDataAddEvent, {
+              message: detail.message,
+            });
           });
-        });
+          return;
+        }
+
+        setFormError(extractErrorMessage(error));
       },
     });
 
   const handleAddEvent = (data: FormDataAddEvent) => {
+    clearErrors();
+    setFormError(null);
     mutateAddEvent(data);
   };
 
   const handleClose = () => {
     disposePendingBlob();
     resetRegionSearch();
+    setFormError(null);
     reset();
     applyPreview(null);
     onClose();
@@ -295,6 +309,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddEvent,
     handleClose,
     handleUploadBanner,

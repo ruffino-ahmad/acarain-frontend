@@ -89,7 +89,11 @@ const useInfoTab = (props: UseInfoTabProps) => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { mutateUpdateEvent, isPendingUpdateEvent } = useUpdateEvent(id);
+  const {
+    mutateUpdateEvent,
+    isPendingUpdateEvent,
+    errorMessage,
+  } = useUpdateEvent(id);
 
   useEffect(() => {
     reset(getDefaultValues(dataEvent));
@@ -121,6 +125,7 @@ const useInfoTab = (props: UseInfoTabProps) => {
     isDirty,
     handleSaveInfo,
     isPendingUpdateEvent,
+    errorMessage,
     categoryList,
     currentSlug,
     slugPreview,

@@ -102,6 +102,7 @@ const AddCategoryModal = (props: AddCategoryModalProps) => {
                 isDeleting={isDeletingIcon}
                 isInvalid={errors.icon !== undefined}
                 errorMessage={errors.icon?.message}
+                previewClassName="mx-auto aspect-square w-full max-w-40 object-contain"
               />
             </div>
           </ModalBody>

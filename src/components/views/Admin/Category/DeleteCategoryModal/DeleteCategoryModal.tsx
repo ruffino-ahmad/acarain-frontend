@@ -1,17 +1,16 @@
-import InputFile from "@/components/ui/InputFile";
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
+import type { ICategory } from "@/types/Category";
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Spinner,
-  Textarea,
 } from "@heroui/react";
+
 import useDeleteCategoryModal from "./useDeleteCategoryModal";
-import { ICategory } from "@/types/Category";
+
 interface DeleteCategoryModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen?: boolean) => void;
@@ -24,12 +23,28 @@ const DeleteCategoryModal = (props: DeleteCategoryModalProps) => {
   const { isOpen, onClose, onOpenChange, refetchCategory, selectedCategory } =
     props;
 
-  const { handleDeleteCategory, isPendingMutateDeleteCategory } =
-    useDeleteCategoryModal({ onClose, refetchCategory });
+  const {
+    handleDeleteCategory,
+    isPendingMutateDeleteCategory,
+    errorMessage,
+    clearError,
+  } = useDeleteCategoryModal({ onClose, refetchCategory });
+
+  const handleClose = () => {
+    clearError();
+    onClose();
+  };
+
+  const handleOpenChange = (nextOpen?: boolean) => {
+    if (nextOpen === false) {
+      clearError();
+    }
+    onOpenChange(nextOpen);
+  };
 
   return (
     <Modal
-      onOpenChange={onOpenChange}
+      onOpenChange={handleOpenChange}
       isOpen={isOpen}
       placement="center"
       scrollBehavior="inside"
@@ -43,19 +58,23 @@ const DeleteCategoryModal = (props: DeleteCategoryModalProps) => {
             Are you sure you want to delete this category? This action cannot be
             undone.
           </p>
+          <InlineErrorAlert
+            title="Unable to delete category"
+            message={errorMessage}
+          />
         </ModalBody>
         <ModalFooter>
           <Button
             color="default"
             variant="flat"
             isDisabled={isPendingMutateDeleteCategory}
-            onPress={onClose}
+            onPress={handleClose}
           >
             Cancel
           </Button>
           <Button
             color="danger"
-            // isDisabled={!selectedCategory || isPendingMutateDeleteCategory}
+            isDisabled={!selectedCategory || isPendingMutateDeleteCategory}
             isLoading={isPendingMutateDeleteCategory}
             onPress={() =>
               selectedCategory && handleDeleteCategory(selectedCategory._id)

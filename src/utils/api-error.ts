@@ -2,11 +2,18 @@ import { AxiosError } from "axios";
 
 export interface ApiErrorBody {
   message?: string;
+  code?: number;
   data?: {
     field: string;
     message: string;
   }[];
 }
+
+export const getErrorStatus = (error: unknown): number | undefined => {
+  const axiosError = error as AxiosError<ApiErrorBody>;
+
+  return axiosError?.response?.status ?? axiosError?.response?.data?.code;
+};
 
 export const extractErrorMessage = (error: unknown): string => {
   const axiosError = error as AxiosError<ApiErrorBody>;

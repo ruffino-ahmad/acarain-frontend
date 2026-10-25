@@ -44,10 +44,9 @@ const Banner = () => {
             <Image
               src={`${cellValue}`}
               alt="Image"
-              width={300}
-              height={100}
-              className="h-15 w-15 rounded-md object-cover"
-              // di atas buat ubah ukuran
+              width={144}
+              height={81}
+              className="aspect-video w-36 rounded-md object-cover"
             />
           ) : (
             <div className="bg-default-100 text-default-500 flex h-12 w-12 items-center justify-center rounded-md text-xs font-semibold uppercase">

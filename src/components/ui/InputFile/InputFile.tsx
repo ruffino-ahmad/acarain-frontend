@@ -22,6 +22,7 @@ interface InputFileProps {
   isInvalid?: boolean;
   errorMessage?: string;
   label?: ReactNode;
+  previewClassName?: string;
 }
 
 const ACCEPTED_TYPES = "image/jpeg,image/png,image/webp";
@@ -39,6 +40,7 @@ const InputFile = (props: InputFileProps) => {
     onUpload,
     onDelete,
     label,
+    previewClassName,
   } = props;
   const drop = useRef<HTMLDivElement>(null);
   const inputId = `dropzone-file-${useId()}`;
@@ -108,7 +110,10 @@ const InputFile = (props: InputFileProps) => {
             <img
               src={preview}
               alt="preview"
-              className="mb-2 max-h-40 max-w-full rounded-md object-contain"
+              className={cn(
+                "mb-2 rounded-md",
+                previewClassName ?? "max-h-40 max-w-full object-contain"
+              )}
             />
             <Button
               isIconOnly

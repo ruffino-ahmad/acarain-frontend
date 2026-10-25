@@ -1,9 +1,10 @@
+import { useState } from "react";
+
 import { useMutation } from "@tanstack/react-query";
+
 import categoryServices from "@/services/category.service";
-import { ApiErrorBody, extractErrorMessage } from "@/utils/api-error";
+import { extractErrorMessage } from "@/utils/api-error";
 import toast from "@/utils/toast";
-import { on } from "events";
-import useAddCategoryModal from "../AddCategoryModal/useAddCategoryModal";
 
 interface UseDeleteCategoryModalProps {
   onClose: () => void;
@@ -13,18 +14,24 @@ interface UseDeleteCategoryModalProps {
 const useDeleteCategoryModal = (props: UseDeleteCategoryModalProps) => {
   const { onClose, refetchCategory } = props;
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     mutate: mutateDeleteCategory,
     isPending: isPendingMutateDeleteCategory,
   } = useMutation({
     mutationFn: (id: string) => categoryServices.deleteCategory(id),
+    onMutate: () => {
+      setErrorMessage(null);
+    },
     onSuccess: () => {
+      setErrorMessage(null);
       toast.success("Category deleted successfully");
       onClose();
       refetchCategory();
     },
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      setErrorMessage(extractErrorMessage(error));
     },
   });
 
@@ -32,9 +39,15 @@ const useDeleteCategoryModal = (props: UseDeleteCategoryModalProps) => {
     return mutateDeleteCategory(id);
   };
 
+  const clearError = () => {
+    setErrorMessage(null);
+  };
+
   return {
     handleDeleteCategory,
     isPendingMutateDeleteCategory,
+    errorMessage,
+    clearError,
   };
 };
 

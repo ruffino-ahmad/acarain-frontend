@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import type { IEvent } from "@/types/Event";
 import {
   Button,
@@ -29,6 +30,7 @@ const InfoTab = (props: InfoTabProps) => {
     isDirty,
     handleSaveInfo,
     isPendingUpdateEvent,
+    errorMessage,
     categoryList,
     currentSlug,
     slugPreview,
@@ -47,6 +49,10 @@ const InfoTab = (props: InfoTabProps) => {
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleSaveInfo)}
         >
+          <InlineErrorAlert
+            title="Unable to update event"
+            message={errorMessage}
+          />
           <Controller
             name="name"
             control={control}

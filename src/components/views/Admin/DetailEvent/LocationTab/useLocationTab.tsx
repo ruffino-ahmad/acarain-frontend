@@ -66,7 +66,11 @@ const useLocationTab = (props: UseLocationTabProps) => {
     resetRegionSearch,
   } = useRegionOptions({ provinceId: selectedProvinceId, enabled: !isOnline });
 
-  const { mutateUpdateEvent, isPendingUpdateEvent } = useUpdateEvent(id);
+  const {
+    mutateUpdateEvent,
+    isPendingUpdateEvent,
+    errorMessage,
+  } = useUpdateEvent(id);
 
   useEffect(() => {
     reset(getDefaultValues(dataEvent));
@@ -152,6 +156,7 @@ const useLocationTab = (props: UseLocationTabProps) => {
     isPendingProvinces,
     isPendingRegencies,
     isPendingUpdateEvent,
+    errorMessage,
     handleSaveLocation,
     handleToggleOnline,
     handleProvinceChange,

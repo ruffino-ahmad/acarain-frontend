@@ -1,10 +1,12 @@
-import { Button, button, Card, CardBody, Input, Spinner } from "@heroui/react";
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
+import { cn } from "@/utils/cn";
+import { Button, Card, CardBody, Input, Spinner } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
-import useLogin from "./useLogin";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Controller } from "react-hook-form";
-import { cn } from "@/utils/cn";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+
+import useLogin from "./useLogin";
 
 const Login = () => {
   const {
@@ -42,11 +44,11 @@ const Login = () => {
               Register here
             </Link>
           </p>
-          {errors.root && (
-            <p className="text-danger mb-2 font-medium">
-              {errors?.root?.message}
-            </p>
-          )}
+          <InlineErrorAlert
+            title="Unable to login"
+            message={errors.root?.message}
+            className="mb-2"
+          />
           <form
             className={cn(
               "flex w-80 flex-col",

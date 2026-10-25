@@ -6,7 +6,11 @@ import { IRegister } from "@/types/Auth";
 import authServices from "@/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { extractErrorMessage } from "@/utils/api-error";
+import {
+  extractErrorField,
+  extractErrorMessage,
+  getErrorStatus,
+} from "@/utils/api-error";
 import toast from "@/utils/toast";
 
 const registerSchema = yup.object().shape({
@@ -45,6 +49,7 @@ const useRegister = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    clearErrors,
     setError,
   } = useForm({
     resolver: yupResolver(registerSchema),
@@ -58,7 +63,26 @@ const useRegister = () => {
   const { mutate: mutateRegister, isPending: isPendingRegister } = useMutation({
     mutationFn: registerService,
     onError(error) {
-      toast.error(extractErrorMessage(error));
+      const details = extractErrorField(error);
+
+      if (details.length > 0) {
+        details.forEach(detail => {
+          if (!detail.field) return;
+          setError(detail.field as keyof IRegister, {
+            message: detail.message,
+          });
+        });
+        return;
+      }
+
+      const message = extractErrorMessage(error);
+
+      if (getErrorStatus(error) === 409) {
+        setError("email", { message });
+        return;
+      }
+
+      setError("root", { message });
     },
     onSuccess: () => {
       reset();
@@ -68,6 +92,7 @@ const useRegister = () => {
   });
 
   const handleRegister = (data: IRegister) => {
+    clearErrors();
     return mutateRegister(data);
   };
 

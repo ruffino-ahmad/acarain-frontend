@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import InputFile from "@/components/ui/InputFile";
 import {
   Autocomplete,
@@ -33,6 +34,7 @@ const AddEventModal = (props: AddEventModalProps) => {
     control,
     handleSubmit,
     errors,
+    formError,
     handleAddEvent,
     handleClose,
     handleUploadBanner,
@@ -76,6 +78,10 @@ const AddEventModal = (props: AddEventModalProps) => {
           <ModalHeader>Add Event</ModalHeader>
           <ModalBody>
             <div className="flex flex-col gap-4">
+              <InlineErrorAlert
+                title="Unable to create event"
+                message={formError}
+              />
               <p className="text-sm font-bold">Information</p>
               <Controller
                 name="name"
@@ -315,6 +321,7 @@ const AddEventModal = (props: AddEventModalProps) => {
                 isUploading={isUploadingBanner}
                 isInvalid={errors.banner !== undefined}
                 errorMessage={errors.banner?.message}
+                previewClassName="aspect-video w-full max-w-md object-cover"
               />
             </div>
           </ModalBody>

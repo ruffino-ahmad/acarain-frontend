@@ -29,7 +29,11 @@ const useCoverTab = (props: UseCoverTabProps) => {
   const pendingBlobRef = useRef<string | null>(null);
   const isCommittedRef = useRef(false);
 
-  const { mutateUpdateEvent, isPendingUpdateEvent } = useUpdateEvent(id);
+  const {
+    mutateUpdateEvent,
+    isPendingUpdateEvent,
+    errorMessage,
+  } = useUpdateEvent(id);
 
   const applyPreview = useCallback((file: File | null) => {
     if (previewUrlRef.current) {
@@ -125,6 +129,7 @@ const useCoverTab = (props: UseCoverTabProps) => {
     pendingBlob,
     isUploadingCover: uploadCoverMutation.isPending,
     isPendingUpdateEvent,
+    errorMessage,
     handleUploadCover,
     handleSaveCover,
     handleCancelSelection,

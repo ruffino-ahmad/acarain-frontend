@@ -1,3 +1,4 @@
+import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import type { IEvent } from "@/types/Event";
 import {
   Autocomplete,
@@ -33,6 +34,7 @@ const LocationTab = (props: LocationTabProps) => {
     isPendingProvinces,
     isPendingRegencies,
     isPendingUpdateEvent,
+    errorMessage,
     handleSaveLocation,
     handleToggleOnline,
     handleProvinceChange,
@@ -55,6 +57,10 @@ const LocationTab = (props: LocationTabProps) => {
           className="flex flex-col gap-4"
           onSubmit={handleSubmit(handleSaveLocation)}
         >
+          <InlineErrorAlert
+            title="Unable to update event"
+            message={errorMessage}
+          />
           <Controller
             name="isOnline"
             control={control}
