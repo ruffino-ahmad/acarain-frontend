@@ -19,6 +19,9 @@ const authServices = {
       },
     });
   },
+  getProfile: () => {
+    return instance.get(`${endpoint.AUTH}/me`, {});
+  },
 };
 
 export default authServices;

@@ -1,16 +1,12 @@
-import { Inter } from "next/font/google";
-import { Button } from "@heroui/react";
-import PageHead from "@/components/commons/PageHead";
+import LandingPageLayout from "@/components/layouts/LandingPageLayout";
+import Home from "@/components/views/Home/Home";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Home() {
+const HomePage = () => {
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <PageHead title="Home" />
-      <Button color="primary">Click me</Button>
-    </main>
+    <LandingPageLayout title="Home">
+      <Home />
+    </LandingPageLayout>
   );
-}
+};
+
+export default HomePage;
