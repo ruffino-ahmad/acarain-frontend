@@ -10,8 +10,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Select,
-  SelectItem,
   Spinner,
   Switch,
   Textarea,
@@ -42,9 +40,11 @@ const AddEventModal = (props: AddEventModalProps) => {
     handleToggleOnline,
     handleProvinceChange,
     bannerPreview,
-    categoryList,
+    filteredCategories,
     filteredProvinces,
     filteredRegencies,
+    handleCategorySearch,
+    handleCategoryOpen,
     handleProvinceSearch,
     handleRegencySearch,
     handleProvinceOpen,
@@ -54,6 +54,7 @@ const AddEventModal = (props: AddEventModalProps) => {
     selectedProvinceId,
     isPendingMutateAddEvent,
     isUploadingBanner,
+    isPendingCategories,
     isPendingProvinces,
     isPendingRegencies,
   } = useAddEventModal({ onClose, refetchEvent });
@@ -109,22 +110,33 @@ const AddEventModal = (props: AddEventModalProps) => {
                 name="category"
                 control={control}
                 render={({ field }) => (
-                  <Select
+                  <Autocomplete
                     label="Category"
                     variant="bordered"
-                    selectedKeys={field.value ? [field.value] : []}
-                    onSelectionChange={keys =>
-                      field.onChange(Array.from(keys)[0] ?? "")
+                    placeholder="Search category"
+                    items={filteredCategories}
+                    defaultFilter={() => true}
+                    selectedKey={field.value || null}
+                    onSelectionChange={key =>
+                      field.onChange(String(key ?? ""))
                     }
+                    onInputChange={handleCategorySearch}
+                    onOpenChange={handleCategoryOpen}
+                    onClear={() => field.onChange("")}
+                    isClearable
+                    isLoading={isPendingCategories}
                     isInvalid={errors.category !== undefined}
                     errorMessage={errors.category?.message}
                   >
-                    {(categoryList ?? []).map(category => (
-                      <SelectItem key={category._id} textValue={category.name}>
+                    {category => (
+                      <AutocompleteItem
+                        key={category._id}
+                        textValue={category.name}
+                      >
                         {category.name}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
                 )}
               />
               <Controller

@@ -1,13 +1,13 @@
 import InlineErrorAlert from "@/components/ui/InlineErrorAlert";
 import type { IEvent } from "@/types/Event";
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Card,
   CardBody,
   CardHeader,
   Input,
-  Select,
-  SelectItem,
   Switch,
   Textarea,
 } from "@heroui/react";
@@ -31,7 +31,10 @@ const InfoTab = (props: InfoTabProps) => {
     handleSaveInfo,
     isPendingUpdateEvent,
     errorMessage,
-    categoryList,
+    filteredCategories,
+    isPendingCategories,
+    handleCategorySearch,
+    handleCategoryOpen,
     currentSlug,
     slugPreview,
   } = useInfoTab({ dataEvent, id });
@@ -90,23 +93,29 @@ const InfoTab = (props: InfoTabProps) => {
             name="category"
             control={control}
             render={({ field }) => (
-              <Select
+              <Autocomplete
                 label="Category"
                 labelPlacement="outside"
                 variant="bordered"
-                selectedKeys={field.value ? [field.value] : []}
-                onSelectionChange={keys =>
-                  field.onChange(String(Array.from(keys)[0] ?? ""))
-                }
+                placeholder="Search category"
+                items={filteredCategories}
+                defaultFilter={() => true}
+                selectedKey={field.value || null}
+                onSelectionChange={key => field.onChange(String(key ?? ""))}
+                onInputChange={handleCategorySearch}
+                onOpenChange={handleCategoryOpen}
+                onClear={() => field.onChange("")}
+                isClearable
+                isLoading={isPendingCategories}
                 isInvalid={errors.category !== undefined}
                 errorMessage={errors.category?.message}
               >
-                {(categoryList ?? []).map(category => (
-                  <SelectItem key={category._id} textValue={category.name}>
+                {category => (
+                  <AutocompleteItem key={category._id} textValue={category.name}>
                     {category.name}
-                  </SelectItem>
-                ))}
-              </Select>
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
             )}
           />
           <Controller

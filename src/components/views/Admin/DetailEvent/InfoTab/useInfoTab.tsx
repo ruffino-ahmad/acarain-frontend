@@ -1,11 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 import * as yup from "yup";
 
-import categoryServices from "@/services/category.service";
+import useCategoryOptions from "@/hooks/useCategoryOptions";
 import type { IEvent } from "@/types/Event";
 import { toDateTimeLocal } from "@/utils/date";
 import useUpdateEvent from "../useUpdateEvent";
@@ -80,14 +79,12 @@ const useInfoTab = (props: UseInfoTabProps) => {
       ? slugify(watchedName, { lower: true, strict: true, trim: true })
       : null;
 
-  const { data: categoryList } = useQuery({
-    queryKey: ["Category", "select"],
-    queryFn: async () => {
-      const res = await categoryServices.getCategories("limit=100&page=1");
-      return res.data.data;
-    },
-    staleTime: 5 * 60 * 1000,
-  });
+  const {
+    filteredCategories,
+    isPendingCategories,
+    handleCategorySearch,
+    handleCategoryOpen,
+  } = useCategoryOptions();
 
   const {
     mutateUpdateEvent,
@@ -126,7 +123,10 @@ const useInfoTab = (props: UseInfoTabProps) => {
     handleSaveInfo,
     isPendingUpdateEvent,
     errorMessage,
-    categoryList,
+    filteredCategories,
+    isPendingCategories,
+    handleCategorySearch,
+    handleCategoryOpen,
     currentSlug,
     slugPreview,
   };

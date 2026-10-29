@@ -1,12 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import slugify from "slugify";
 import * as yup from "yup";
 
+import useCategoryOptions from "@/hooks/useCategoryOptions";
 import useRegionOptions from "@/hooks/useRegionOptions";
-import categoryServices from "@/services/category.service";
 import eventServices from "@/services/event.service";
 import uploadServices from "@/services/upload.service";
 import type { ICreateEvent } from "@/types/Event";
@@ -147,14 +147,12 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
     };
   }, [disposePendingBlob]);
 
-  const { data: categoryList } = useQuery({
-    queryKey: ["Category", "select"],
-    queryFn: async () => {
-      const res = await categoryServices.getCategories("limit=100&page=1");
-      return res.data.data;
-    },
-    staleTime: 5 * 60 * 1000,
-  });
+  const {
+    filteredCategories,
+    isPendingCategories,
+    handleCategorySearch,
+    handleCategoryOpen,
+  } = useCategoryOptions();
 
   const uploadBannerMutation = useMutation({
     mutationFn: (file: File) => uploadServices.uploadFile(file, "banners"),
@@ -317,9 +315,11 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
     handleToggleOnline,
     handleProvinceChange,
     bannerPreview,
-    categoryList,
+    filteredCategories,
     filteredProvinces,
     filteredRegencies,
+    handleCategorySearch,
+    handleCategoryOpen,
     handleProvinceSearch,
     handleRegencySearch,
     handleProvinceOpen,
@@ -329,6 +329,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
     selectedProvinceId,
     isPendingMutateAddEvent,
     isUploadingBanner: uploadBannerMutation.isPending,
+    isPendingCategories,
     isPendingProvinces,
     isPendingRegencies,
   };

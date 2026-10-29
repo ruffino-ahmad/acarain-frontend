@@ -29,6 +29,7 @@ const Home = () => {
         title="Featured Events"
         events={dataFeaturedEvents ? dataFeaturedEvents.data : []}
         isLoading={isLoadingFeaturedEvents}
+        urlMore="/events?isFeatured=true"
       />
       <Skeleton
         isLoaded={!isLoadingBanners}
@@ -48,6 +49,7 @@ const Home = () => {
         title="Latest Events"
         events={dataLatestEvents ? dataLatestEvents.data : []}
         isLoading={isLoadingLatestEvents}
+        urlMore="/events"
       />
       <HomeCategoryList
         categories={dataCategories ? dataCategories.data : []}

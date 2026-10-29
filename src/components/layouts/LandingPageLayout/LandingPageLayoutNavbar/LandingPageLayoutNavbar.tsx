@@ -54,9 +54,12 @@ const LandingPageLayoutNavbar = () => {
               key={`nav-${item.label}`}
               as={Link}
               href={item.href}
-              className={cn("text-default-700 hover:text-danger font-medium", {
-                "text-danger font-bold": router.pathname === item.href,
-              })}
+              className={cn(
+                "text-default-700 font-medium transition-colors [&:hover]:text-danger",
+                {
+                  "text-danger font-bold": router.pathname === item.href,
+                }
+              )}
             >
               {item.label}
             </NavbarItem>
@@ -124,20 +127,25 @@ const LandingPageLayoutNavbar = () => {
 
         <NavbarMenu className="gap-4">
           {NAV_ITEMS.map(item => (
-            <NavbarMenuItem
-              key={`nav-${item.label}`}
-              className={cn("text-default-700 hover:text-danger font-medium", {
-                "text-danger font-bold": router.pathname === item.href,
-              })}
-            >
-              <Link href={item.href}>{item.label}</Link>
+            <NavbarMenuItem key={`nav-${item.label}`}>
+              <Link
+                href={item.href}
+                className={cn(
+                  "text-default-700 font-medium transition-colors [&:hover]:text-danger",
+                  {
+                    "text-danger font-bold": router.pathname === item.href,
+                  }
+                )}
+              >
+                {item.label}{" "}
+              </Link>
             </NavbarMenuItem>
           ))}
           {session.status === "authenticated" ? (
             <Fragment>
               <NavbarMenuItem
                 className={cn(
-                  "text-default-700 hover:text-danger font-medium",
+                  "text-default-700 font-medium transition-colors [&:hover]:text-danger",
                   {
                     hidden: dataProfile?.role !== "admin",
                   }
@@ -145,7 +153,7 @@ const LandingPageLayoutNavbar = () => {
               >
                 <Link href="/admin/dashboard">Admin</Link>
               </NavbarMenuItem>
-              <NavbarMenuItem className="text-default-700 hover:text-danger font-medium">
+              <NavbarMenuItem className="text-default-700 font-medium transition-colors [&:hover]:text-danger">
                 <Link href="/member/dashboard">Profile</Link>
               </NavbarMenuItem>
               <NavbarMenuItem>
