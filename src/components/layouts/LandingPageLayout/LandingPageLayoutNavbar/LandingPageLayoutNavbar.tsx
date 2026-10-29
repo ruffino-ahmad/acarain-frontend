@@ -7,6 +7,8 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Input,
+  Listbox,
+  ListboxItem,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -14,6 +16,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Spinner,
 } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,11 +27,20 @@ import { CiSearch } from "react-icons/ci";
 import { signOut, useSession } from "next-auth/react";
 import useLandingPageLayoutNavbar from "./useLandingPageLayoutNavbar";
 import { Fragment } from "react";
+import { IEvent } from "@/types/Event";
 
 const LandingPageLayoutNavbar = () => {
   const router = useRouter();
   const session = useSession();
-  const { dataProfile } = useLandingPageLayoutNavbar();
+  const {
+    dataProfile,
+    dataEventsSearch,
+    isLoadingEventsSearch,
+    isRefetchingEventsSearch,
+    handleSearch,
+    search,
+    setSearch,
+  } = useLandingPageLayoutNavbar();
 
   return (
     <Navbar
@@ -55,7 +67,7 @@ const LandingPageLayoutNavbar = () => {
               as={Link}
               href={item.href}
               className={cn(
-                "text-default-700 font-medium transition-colors [&:hover]:text-danger",
+                "text-default-700 [&:hover]:text-danger font-medium transition-colors",
                 {
                   "text-danger font-bold": router.pathname === item.href,
                 }
@@ -75,9 +87,38 @@ const LandingPageLayoutNavbar = () => {
             className="w-[300px]"
             placeholder="Search Event"
             startContent={<CiSearch />}
-            onClear={() => {}}
-            onChange={() => {}}
-          ></Input>
+            onClear={() => setSearch("")}
+            onChange={handleSearch}
+          />
+          {search !== "" && (
+            <Listbox
+              items={dataEventsSearch?.data || []}
+              className="absolute right-0 top-12 rounded-xl border bg-white"
+            >
+              {!isRefetchingEventsSearch && !isLoadingEventsSearch ? (
+                (item: IEvent) => (
+                  <ListboxItem key={item._id} href={`/events/${item.slug}`}>
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={`${item.bannerUrl}`}
+                        alt={`${item.name}`}
+                        width={100}
+                        height={40}
+                        className="w-2/5 rounded-md"
+                      />
+                      <p className="line-clamp-2 w-3/5 text-wrap">
+                        {item.name}
+                      </p>
+                    </div>
+                  </ListboxItem>
+                )
+              ) : (
+                <ListboxItem key="loading">
+                  <Spinner color="danger" size="sm" />
+                </ListboxItem>
+              )}
+            </Listbox>
+          )}
         </NavbarItem>
         {session.status === "authenticated" ? (
           <NavbarItem className="hidden lg:block">
@@ -131,7 +172,7 @@ const LandingPageLayoutNavbar = () => {
               <Link
                 href={item.href}
                 className={cn(
-                  "text-default-700 font-medium transition-colors [&:hover]:text-danger",
+                  "text-default-700 [&:hover]:text-danger font-medium transition-colors",
                   {
                     "text-danger font-bold": router.pathname === item.href,
                   }
@@ -145,7 +186,7 @@ const LandingPageLayoutNavbar = () => {
             <Fragment>
               <NavbarMenuItem
                 className={cn(
-                  "text-default-700 font-medium transition-colors [&:hover]:text-danger",
+                  "text-default-700 [&:hover]:text-danger font-medium transition-colors",
                   {
                     hidden: dataProfile?.role !== "admin",
                   }
@@ -153,7 +194,7 @@ const LandingPageLayoutNavbar = () => {
               >
                 <Link href="/admin/dashboard">Admin</Link>
               </NavbarMenuItem>
-              <NavbarMenuItem className="text-default-700 font-medium transition-colors [&:hover]:text-danger">
+              <NavbarMenuItem className="text-default-700 [&:hover]:text-danger font-medium transition-colors">
                 <Link href="/member/dashboard">Profile</Link>
               </NavbarMenuItem>
               <NavbarMenuItem>
