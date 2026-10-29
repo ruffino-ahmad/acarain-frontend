@@ -33,7 +33,7 @@ const LandingPageLayoutNavbar = () => {
   return (
     <Navbar
       maxWidth="full"
-      classNames={{ wrapper: "px-6 xl:px-20" }}
+      classNames={{ wrapper: "px-6 " }}
       isBordered
       isBlurred={false}
       shouldHideOnScroll
