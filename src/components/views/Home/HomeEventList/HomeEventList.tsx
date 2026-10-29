@@ -28,7 +28,7 @@ const HomeEventList = (props: HomeEventListProps) => {
                 className="first:ml-6 last:mr-6 lg:first:ml-0 lg:last:mr-0"
               />
             ))
-          : Array.from({ length: 4 }).map((_, index) => (
+          : Array.from({ length: 5 }).map((_, index) => (
               <CardEvent
                 key={`card-event-loading-${index}`}
                 isLoading={isLoading}
