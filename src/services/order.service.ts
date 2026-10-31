@@ -12,6 +12,11 @@ const orderServices = {
   getOrderById: (id: string) => {
     return instance.get<IApiResponse<IOrder>>(`${endpoint.ORDER}/${id}`);
   },
+  getMemberOrder: (params: string) => {
+    return instance.get<IApiResponse<IOrder[]>>(
+      `${endpoint.ORDER}/history?${params}`
+    );
+  },
 };
 
 export default orderServices;

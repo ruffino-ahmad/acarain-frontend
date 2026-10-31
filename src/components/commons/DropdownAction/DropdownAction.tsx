@@ -8,12 +8,17 @@ import {
 import { CiMenuKebab } from "react-icons/ci";
 
 interface DropDownActionProps {
-  onPressButtonDetail: () => void;
-  onPressButtonDelete: () => void;
+  onPressButtonDetail?: () => void;
+  onPressButtonDelete?: () => void;
+  hideButtonDelete?: boolean;
 }
 
 const DropDownAction = (props: DropDownActionProps) => {
-  const { onPressButtonDetail, onPressButtonDelete } = props;
+  const {
+    onPressButtonDetail,
+    onPressButtonDelete,
+    hideButtonDelete = false,
+  } = props;
   return (
     <Dropdown>
       <DropdownTrigger>
@@ -25,13 +30,15 @@ const DropDownAction = (props: DropDownActionProps) => {
         <DropdownItem key="detail-event-button" onPress={onPressButtonDetail}>
           Detail
         </DropdownItem>
-        <DropdownItem
-          key="delete-event"
-          className="text-danger-500"
-          onPress={onPressButtonDelete}
-        >
-          Delete
-        </DropdownItem>
+        {!hideButtonDelete ? (
+          <DropdownItem
+            key="delete-event"
+            className="text-danger-500"
+            onPress={onPressButtonDelete}
+          >
+            Delete
+          </DropdownItem>
+        ) : null}
       </DropdownMenu>
     </Dropdown>
   );

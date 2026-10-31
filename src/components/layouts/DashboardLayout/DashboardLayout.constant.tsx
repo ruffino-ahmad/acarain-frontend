@@ -15,16 +15,16 @@ const SIDEBAR_MEMBER = [
     icon: <CiGrid41 />,
   },
   {
-    key: "setting",
-    label: "Setting",
-    href: "/member/setting",
-    icon: <CiSettings />,
-  },
-  {
     key: "transaction",
     label: "Transaction",
     href: "/member/transaction",
     icon: <CiWallet />,
+  },
+  {
+    key: "setting",
+    label: "Setting",
+    href: "/member/setting",
+    icon: <CiSettings />,
   },
 ];
 
