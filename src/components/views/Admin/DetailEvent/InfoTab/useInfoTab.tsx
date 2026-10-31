@@ -7,7 +7,7 @@ import * as yup from "yup";
 import useCategoryOptions from "@/hooks/useCategoryOptions";
 import type { IEvent } from "@/types/Event";
 import { toDateTimeLocal } from "@/utils/date";
-import useUpdateEvent from "../useUpdateEvent";
+import useDetailEvent from "../useDetailEvent";
 
 const schema = yup.object({
   name: yup
@@ -34,7 +34,7 @@ const schema = yup.object({
         return new Date(value).getTime() > new Date(startDate).getTime();
       }
     ),
-  isPublish: yup.boolean().required(),
+  isPublished: yup.boolean().required(),
   isFeatured: yup.boolean().required(),
 });
 
@@ -42,7 +42,6 @@ type FormDataInfo = yup.InferType<typeof schema>;
 
 interface UseInfoTabProps {
   dataEvent: IEvent;
-  id: string;
 }
 
 const getCategoryId = (category: IEvent["category"]) =>
@@ -54,12 +53,12 @@ const getDefaultValues = (dataEvent: IEvent): FormDataInfo => ({
   description: dataEvent.description ?? "",
   startDate: toDateTimeLocal(dataEvent.startDate),
   endDate: toDateTimeLocal(dataEvent.endDate),
-  isPublish: dataEvent.isPublish ?? false,
+  isPublished: dataEvent.isPublished ?? false,
   isFeatured: dataEvent.isFeatured ?? false,
 });
 
 const useInfoTab = (props: UseInfoTabProps) => {
-  const { dataEvent, id } = props;
+  const { dataEvent } = props;
 
   const {
     control,
@@ -90,7 +89,7 @@ const useInfoTab = (props: UseInfoTabProps) => {
     mutateUpdateEvent,
     isPendingUpdateEvent,
     errorMessage,
-  } = useUpdateEvent(id);
+  } = useDetailEvent();
 
   useEffect(() => {
     reset(getDefaultValues(dataEvent));
@@ -104,7 +103,7 @@ const useInfoTab = (props: UseInfoTabProps) => {
         description: data.description,
         startDate: data.startDate,
         endDate: data.endDate,
-        isPublish: data.isPublish,
+        isPublished: data.isPublished,
         isFeatured: data.isFeatured,
       },
       {

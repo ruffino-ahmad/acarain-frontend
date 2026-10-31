@@ -17,11 +17,10 @@ import useInfoTab from "./useInfoTab";
 
 interface InfoTabProps {
   dataEvent: IEvent;
-  id: string;
 }
 
 const InfoTab = (props: InfoTabProps) => {
-  const { dataEvent, id } = props;
+  const { dataEvent } = props;
 
   const {
     control,
@@ -37,7 +36,7 @@ const InfoTab = (props: InfoTabProps) => {
     handleCategoryOpen,
     currentSlug,
     slugPreview,
-  } = useInfoTab({ dataEvent, id });
+  } = useInfoTab({ dataEvent });
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
@@ -167,7 +166,7 @@ const InfoTab = (props: InfoTabProps) => {
           <p className="text-sm font-bold">Status</p>
           <div className="flex flex-col gap-3">
             <Controller
-              name="isPublish"
+              name="isPublished"
               control={control}
               render={({ field }) => (
                 <Switch

@@ -42,7 +42,7 @@ interface IEvent {
   createdBy: IEventCreatedBy | string;
   isFeatured: boolean;
   isOnline: boolean;
-  isPublish: boolean;
+  isPublished: boolean;
   location?: IEventLocation;
   createdAt?: string;
   updatedAt?: string;
@@ -57,7 +57,7 @@ interface ICreateEvent {
   category: string;
   isFeatured?: boolean;
   isOnline?: boolean;
-  isPublish?: boolean;
+  isPublished?: boolean;
   location: IEventLocation;
 }
 

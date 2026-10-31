@@ -186,7 +186,7 @@ const AddEventModal = (props: AddEventModalProps) => {
               <p className="text-sm font-bold">Status</p>
               <div className="flex flex-col gap-3">
                 <Controller
-                  name="isPublish"
+                  name="isPublished"
                   control={control}
                   render={({ field }) => (
                     <Switch

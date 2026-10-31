@@ -24,10 +24,14 @@ const formatDateTime = (value?: string | Date | null): string => {
   )} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
-const convertTime = (isoDate: string): string => {
-  const dataObject = new Date(isoDate);
+const convertTime = (value?: string | Date | null): string => {
+  if (!value) return "-";
 
-  const date = dataObject.toLocaleString("id-ID", {
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) return "-";
+
+  const formatted = date.toLocaleString("id-ID", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -36,6 +40,6 @@ const convertTime = (isoDate: string): string => {
     timeZone: "Asia/Jakarta",
   });
 
-  return `${date} WIB`;
+  return `${formatted} WIB`;
 };
 export { formatDateTime, toDateTimeLocal, convertTime };

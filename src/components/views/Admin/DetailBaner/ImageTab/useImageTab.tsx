@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import uploadServices from "@/services/upload.service";
 import type { UploadMimeType } from "@/types/Upload";
 import { extractErrorMessage } from "@/utils/api-error";
-import useUpdateBanner from "../useUpdateBanner";
+import useDetailBanner from "../useDetailBanner";
 
 const ALLOWED_MIME_TYPES: UploadMimeType[] = [
   "image/jpeg",
@@ -13,13 +13,7 @@ const ALLOWED_MIME_TYPES: UploadMimeType[] = [
 ];
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
-interface UseImageTabProps {
-  id: string;
-}
-
-const useImageTab = (props: UseImageTabProps) => {
-  const { id } = props;
-
+const useImageTab = () => {
   const [pendingBlob, setPendingBlob] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | undefined>(undefined);
@@ -28,9 +22,8 @@ const useImageTab = (props: UseImageTabProps) => {
   const pendingBlobRef = useRef<string | null>(null);
   const isCommittedRef = useRef(false);
 
-
   const { mutateUpdateBanner, isPendingUpdateBanner, errorMessage } =
-    useUpdateBanner(id);
+    useDetailBanner();
 
   const applyPreview = useCallback((file: File | null) => {
     if (previewUrlRef.current) {
@@ -64,7 +57,7 @@ const useImageTab = (props: UseImageTabProps) => {
   }, []);
 
   const uploadImageMutation = useMutation({
-    mutationFn: (file: File) => uploadServices.uploadFile(file, "categories"),
+    mutationFn: (file: File) => uploadServices.uploadFile(file, "banners"),
     onSuccess(blobName, file) {
       const previous = pendingBlobRef.current;
       if (previous && previous !== blobName) {

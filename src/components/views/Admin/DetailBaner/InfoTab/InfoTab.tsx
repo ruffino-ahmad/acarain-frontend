@@ -16,11 +16,10 @@ import { IBanner } from "@/types/Banner";
 interface InfoTabProps {
   dataBanner: IBanner;
   isLoading: boolean;
-  id: string;
 }
 
 const InfoTab = (props: InfoTabProps) => {
-  const { dataBanner, isLoading, id } = props;
+  const { dataBanner, isLoading } = props;
 
   const {
     control,
@@ -30,14 +29,14 @@ const InfoTab = (props: InfoTabProps) => {
     handleSaveInfo,
     isPendingUpdateBanner,
     errorMessage,
-  } = useInfoTab({ dataBanner, id });
+  } = useInfoTab({ dataBanner });
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
-        <h1 className="w-full text-xl font-bold">Category Info</h1>
+        <h1 className="w-full text-xl font-bold">Banner Info</h1>
         <p className="text-default-400 text-small w-full">
-          Manage information for the category
+          Manage information for the banner
         </p>
       </CardHeader>
       <CardBody>

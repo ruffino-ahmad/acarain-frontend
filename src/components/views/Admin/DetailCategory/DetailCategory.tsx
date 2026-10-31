@@ -14,17 +14,12 @@ const DetailCategory = () => {
     <Tabs aria-label="Options">
       <Tab key="icon" title="Icon">
         <IconTab
-          id={id}
           currentIconUrl={dataCategory.iconUrl}
           isLoading={isLoadingCategory}
         />
       </Tab>
       <Tab key="info" title="Info">
-        <InfoTab
-          id={id}
-          dataCategory={dataCategory}
-          isLoading={isLoadingCategory}
-        />
+        <InfoTab dataCategory={dataCategory} isLoading={isLoadingCategory} />
       </Tab>
     </Tabs>
   );

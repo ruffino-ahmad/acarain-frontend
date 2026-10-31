@@ -3,10 +3,8 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import type { ICategory } from "@/types/Category";
-import useUpdateCategory from "../useUpdateBanner";
-import { IBanner } from "@/types/Banner";
-import useUpdateBanner from "../useUpdateBanner";
+import type { IBanner } from "@/types/Banner";
+import useDetailBanner from "../useDetailBanner";
 
 const schema = yup.object({
   title: yup.string().required("Please enter title"),
@@ -18,11 +16,10 @@ type FormDataInfo = yup.InferType<typeof schema>;
 
 interface UseInfoTabProps {
   dataBanner: IBanner;
-  id: string;
 }
 
 const useInfoTab = (props: UseInfoTabProps) => {
-  const { dataBanner, id } = props;
+  const { dataBanner } = props;
 
   const {
     control,
@@ -39,7 +36,7 @@ const useInfoTab = (props: UseInfoTabProps) => {
   });
 
   const { mutateUpdateBanner, isPendingUpdateBanner, errorMessage } =
-    useUpdateBanner(id);
+    useDetailBanner();
 
   useEffect(() => {
     reset({

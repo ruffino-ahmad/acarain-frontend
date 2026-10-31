@@ -16,11 +16,10 @@ import useInfoTab from "./useInfoTab";
 interface InfoTabProps {
   dataCategory: ICategory;
   isLoading: boolean;
-  id: string;
 }
 
 const InfoTab = (props: InfoTabProps) => {
-  const { dataCategory, isLoading, id } = props;
+  const { dataCategory, isLoading } = props;
 
   const {
     control,
@@ -30,7 +29,7 @@ const InfoTab = (props: InfoTabProps) => {
     handleSaveInfo,
     isPendingUpdateCategory,
     errorMessage,
-  } = useInfoTab({ dataCategory, id });
+  } = useInfoTab({ dataCategory });
 
   return (
     <Card className="w-full p-4 lg:w-1/2">

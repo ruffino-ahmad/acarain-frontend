@@ -8,11 +8,10 @@ import useCoverTab from "./useCoverTab";
 interface CoverTabProps {
   currentBannerUrl?: string | null;
   isLoading: boolean;
-  id: string;
 }
 
 const CoverTab = (props: CoverTabProps) => {
-  const { currentBannerUrl, isLoading, id } = props;
+  const { currentBannerUrl, isLoading } = props;
 
   const {
     preview,
@@ -24,7 +23,7 @@ const CoverTab = (props: CoverTabProps) => {
     handleUploadCover,
     handleSaveCover,
     handleCancelSelection,
-  } = useCoverTab({ id });
+  } = useCoverTab();
 
   return (
     <Card className="w-full p-4 lg:w-1/2">

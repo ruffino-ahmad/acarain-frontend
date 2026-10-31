@@ -8,11 +8,10 @@ import useIconTab from "./useIconTab";
 interface IconTabProps {
   currentIconUrl?: string | null;
   isLoading: boolean;
-  id: string;
 }
 
 const IconTab = (props: IconTabProps) => {
-  const { currentIconUrl, isLoading, id } = props;
+  const { currentIconUrl, isLoading } = props;
 
   const {
     preview,
@@ -24,7 +23,7 @@ const IconTab = (props: IconTabProps) => {
     handleUploadIcon,
     handleSaveIcon,
     handleCancelSelection,
-  } = useIconTab({ id });
+  } = useIconTab();
 
   return (
     <Card className="w-full p-4 lg:w-1/2">

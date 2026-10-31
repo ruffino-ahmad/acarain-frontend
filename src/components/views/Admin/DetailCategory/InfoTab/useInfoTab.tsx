@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import type { ICategory } from "@/types/Category";
-import useUpdateCategory from "../useUpdateCategory";
+import useDetailCategory from "../useDetailCategory";
 
 const schema = yup.object({
   name: yup
@@ -23,11 +23,10 @@ type FormDataInfo = yup.InferType<typeof schema>;
 
 interface UseInfoTabProps {
   dataCategory: ICategory;
-  id: string;
 }
 
 const useInfoTab = (props: UseInfoTabProps) => {
-  const { dataCategory, id } = props;
+  const { dataCategory } = props;
 
   const {
     control,
@@ -46,7 +45,7 @@ const useInfoTab = (props: UseInfoTabProps) => {
     mutateUpdateCategory,
     isPendingUpdateCategory,
     errorMessage,
-  } = useUpdateCategory(id);
+  } = useDetailCategory();
 
   useEffect(() => {
     reset({

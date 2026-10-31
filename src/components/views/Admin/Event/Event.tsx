@@ -58,7 +58,7 @@ const Event = () => {
         case "startDate":
         case "endDate":
           return formatDateTime(cellValue as string);
-        case "isPublish":
+        case "isPublished":
           return (
             <Chip
               color={cellValue === true ? "success" : "warning"}

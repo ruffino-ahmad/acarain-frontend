@@ -45,7 +45,7 @@ const CardEvent = (props: CardEventProps) => {
               {event?.description}
             </p>
             <p className="text-foreground-500">
-              {convertTime(`${event?.startDate}`)}
+              {convertTime(event?.startDate)}
             </p>
           </CardFooter>
         </Fragment>

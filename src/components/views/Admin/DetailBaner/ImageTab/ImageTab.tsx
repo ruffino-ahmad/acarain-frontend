@@ -8,11 +8,10 @@ import useImageTab from "./useImageTab";
 interface ImageTabProps {
   currentImageUrl?: string | null;
   isLoading: boolean;
-  id: string;
 }
 
 const ImageTab = (props: ImageTabProps) => {
-  const { currentImageUrl, isLoading, id } = props;
+  const { currentImageUrl, isLoading } = props;
 
   const {
     preview,
@@ -24,7 +23,7 @@ const ImageTab = (props: ImageTabProps) => {
     handleUploadImage,
     handleSaveImage,
     handleCancelSelection,
-  } = useImageTab({ id });
+  } = useImageTab();
 
   return (
     <Card className="w-full p-4 lg:w-1/2">

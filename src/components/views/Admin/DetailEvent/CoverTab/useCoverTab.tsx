@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import uploadServices from "@/services/upload.service";
 import type { UploadMimeType } from "@/types/Upload";
 import { extractErrorMessage } from "@/utils/api-error";
-import useUpdateEvent from "../useUpdateEvent";
+import useDetailEvent from "../useDetailEvent";
 
 const ALLOWED_MIME_TYPES: UploadMimeType[] = [
   "image/jpeg",
@@ -13,13 +13,7 @@ const ALLOWED_MIME_TYPES: UploadMimeType[] = [
 ];
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
-interface UseCoverTabProps {
-  id: string;
-}
-
-const useCoverTab = (props: UseCoverTabProps) => {
-  const { id } = props;
-
+const useCoverTab = () => {
   const [pendingBlob, setPendingBlob] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [coverError, setCoverError] = useState<string | undefined>(undefined);
@@ -32,7 +26,7 @@ const useCoverTab = (props: UseCoverTabProps) => {
     mutateUpdateEvent,
     isPendingUpdateEvent,
     errorMessage,
-  } = useUpdateEvent(id);
+  } = useDetailEvent();
 
   const applyPreview = useCallback((file: File | null) => {
     if (previewUrlRef.current) {

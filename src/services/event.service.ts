@@ -5,23 +5,21 @@ import { IApiResponse } from "@/types/Pagination";
 
 const eventServices = {
   getEvents: (params?: string) => {
-    return instance.get<IApiResponse<IEvent[]>>(
-      `${endpoint.EVENT}?${params}`,
-    );
+    return instance.get<IApiResponse<IEvent[]>>(`${endpoint.EVENT}?${params}`);
   },
-
   getEventById: (id: string) => {
     return instance.get<IApiResponse<IEvent>>(`${endpoint.EVENT}/${id}`);
   },
-
+  getEventBySlug: (slug: string) => {
+    return instance.get<IApiResponse<IEvent>>(`${endpoint.EVENT}/${slug}/slug`);
+  },
   createEvent: (payload: ICreateEvent) => {
     return instance.post<IApiResponse<IEvent>>(endpoint.EVENT, payload);
   },
-
   updateEvent: (id: string, payload: IUpdateEvent) => {
     return instance.patch<IApiResponse<IEvent>>(
       `${endpoint.EVENT}/${id}`,
-      payload,
+      payload
     );
   },
 

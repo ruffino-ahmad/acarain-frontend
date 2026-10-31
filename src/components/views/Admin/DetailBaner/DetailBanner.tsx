@@ -14,17 +14,12 @@ const DetailBanner = () => {
     <Tabs aria-label="Options">
       <Tab key="image" title="Image">
         <ImageTab
-          id={id}
           currentImageUrl={dataBanner.imageUrl}
           isLoading={isLoadingBanner}
         />
       </Tab>
       <Tab key="info" title="Info">
-        <InfoTab
-          id={id}
-          dataBanner={dataBanner}
-          isLoading={isLoadingBanner}
-        />
+        <InfoTab dataBanner={dataBanner} isLoading={isLoadingBanner} />
       </Tab>
     </Tabs>
   );

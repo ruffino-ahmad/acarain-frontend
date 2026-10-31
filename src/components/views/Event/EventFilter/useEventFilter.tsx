@@ -42,7 +42,6 @@ const schema = yup.object({
     .string()
     .oneOf([...FEATURED_FILTER_KEYS])
     .required(),
-  isPublished: yup.boolean().optional(),
 });
 
 type FormDataEventFilter = yup.InferType<typeof schema>;

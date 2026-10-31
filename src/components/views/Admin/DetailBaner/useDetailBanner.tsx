@@ -1,25 +1,54 @@
-import bannerServices from "@/services/banner.service";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useState } from "react";
+
+import bannerServices from "@/services/banner.service";
+import type { IUpdateBanner } from "@/types/Banner";
+import { extractErrorMessage } from "@/utils/api-error";
+import toast from "@/utils/toast";
 
 const useDetailBanner = () => {
   const { query, isReady } = useRouter();
+  const queryClient = useQueryClient();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const getBannerById = async (id: string) => {
-    const { data } = await bannerServices.getBannerById(id);
+  const id = query.id as string | undefined;
+
+  const getBannerById = async () => {
+    const { data } = await bannerServices.getBannerById(`${id}`);
     return data.data;
   };
 
   const { data: dataBanner, isLoading: isLoadingBanner } = useQuery({
-    queryKey: ["Banner", query.id],
-    queryFn: () => getBannerById(`${query.id}`),
-    enabled: isReady && !!query.id,
+    queryKey: ["Banner", id],
+    queryFn: getBannerById,
+    enabled: isReady && !!id,
   });
+
+  const { mutate: mutateUpdateBanner, isPending: isPendingUpdateBanner } =
+    useMutation({
+      mutationFn: (payload: IUpdateBanner) =>
+        bannerServices.updateBanner(`${id}`, payload),
+      onMutate() {
+        setErrorMessage(null);
+      },
+      onSuccess() {
+        setErrorMessage(null);
+        toast.success("Banner updated successfully");
+        queryClient.invalidateQueries({ queryKey: ["Banner"] });
+      },
+      onError(error) {
+        setErrorMessage(extractErrorMessage(error));
+      },
+    });
 
   return {
     dataBanner,
     isLoadingBanner,
-    id: query.id as string | undefined,
+    id,
+    mutateUpdateBanner,
+    isPendingUpdateBanner,
+    errorMessage,
   };
 };
 

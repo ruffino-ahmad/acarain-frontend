@@ -5,7 +5,7 @@ import * as yup from "yup";
 
 import useRegionOptions from "@/hooks/useRegionOptions";
 import type { IEvent } from "@/types/Event";
-import useUpdateEvent from "../useUpdateEvent";
+import useDetailEvent from "../useDetailEvent";
 
 const schema = yup.object({
   isOnline: yup.boolean().required(),
@@ -19,7 +19,6 @@ type FormDataLocation = yup.InferType<typeof schema>;
 
 interface UseLocationTabProps {
   dataEvent: IEvent;
-  id: string;
 }
 
 const getLocationValues = (dataEvent: IEvent) => ({
@@ -35,7 +34,7 @@ const getDefaultValues = (dataEvent: IEvent): FormDataLocation => ({
 });
 
 const useLocationTab = (props: UseLocationTabProps) => {
-  const { dataEvent, id } = props;
+  const { dataEvent } = props;
 
   const {
     control,
@@ -70,7 +69,7 @@ const useLocationTab = (props: UseLocationTabProps) => {
     mutateUpdateEvent,
     isPendingUpdateEvent,
     errorMessage,
-  } = useUpdateEvent(id);
+  } = useDetailEvent();
 
   useEffect(() => {
     reset(getDefaultValues(dataEvent));

@@ -17,7 +17,7 @@ const COLUMN_LISTS_EVENT = [
   },
   {
     name: "STATUS",
-    uid: "isPublish",
+    uid: "isPublished",
   },
   {
     name: "ACTIONS",

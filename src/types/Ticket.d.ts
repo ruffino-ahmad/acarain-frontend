@@ -21,6 +21,12 @@ interface ICreateTicket {
   events: string;
 }
 
+interface ICart {
+  events: string;
+  ticket: string;
+  quantity: number;
+}
+
 type IUpdateTicket = Partial<Pick<ICreateTicket>>;
 
-export type { ICreateTicket, IUpdateTicket, ITicket, ITicketEvent };
+export type { ICreateTicket, IUpdateTicket, ITicket, ITicketEvent, ICart };

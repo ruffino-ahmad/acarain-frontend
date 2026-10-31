@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import uploadServices from "@/services/upload.service";
 import type { UploadMimeType } from "@/types/Upload";
 import { extractErrorMessage } from "@/utils/api-error";
-import useUpdateCategory from "../useUpdateCategory";
+import useDetailCategory from "../useDetailCategory";
 
 const ALLOWED_MIME_TYPES: UploadMimeType[] = [
   "image/jpeg",
@@ -13,13 +13,7 @@ const ALLOWED_MIME_TYPES: UploadMimeType[] = [
 ];
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
-interface UseIconTabProps {
-  id: string;
-}
-
-const useIconTab = (props: UseIconTabProps) => {
-  const { id } = props;
-
+const useIconTab = () => {
   const [pendingBlob, setPendingBlob] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [iconError, setIconError] = useState<string | undefined>(undefined);
@@ -32,7 +26,7 @@ const useIconTab = (props: UseIconTabProps) => {
     mutateUpdateCategory,
     isPendingUpdateCategory,
     errorMessage,
-  } = useUpdateCategory(id);
+  } = useDetailCategory();
 
   const applyPreview = useCallback((file: File | null) => {
     if (previewUrlRef.current) {

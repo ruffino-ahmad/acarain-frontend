@@ -51,7 +51,7 @@ const schema = yup.object({
   address: yup.string().optional(),
   province: yup.string().optional(),
   regency: yup.string().optional(),
-  isPublish: yup.boolean().required(),
+  isPublished: yup.boolean().required(),
   isFeatured: yup.boolean().required(),
   isOnline: yup.boolean().required(),
 });
@@ -93,7 +93,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
       address: "",
       province: "",
       regency: "",
-      isPublish: false,
+      isPublished: false,
       isFeatured: false,
       isOnline: false,
     },
@@ -226,7 +226,7 @@ const useAddEventModal = (props: UseAddEventModalProps) => {
       endDate: payload.endDate,
       isFeatured: payload.isFeatured,
       isOnline: payload.isOnline,
-      isPublish: payload.isPublish,
+      isPublished: payload.isPublished,
       location: payload.isOnline
         ? {}
         : {

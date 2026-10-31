@@ -17,16 +17,15 @@ const DetailEvent = () => {
     <Tabs aria-label="Event detail">
       <Tab key="cover" title="Cover">
         <CoverTab
-          id={id}
           currentBannerUrl={dataEvent.bannerUrl}
           isLoading={isLoadingEvent}
         />
       </Tab>
       <Tab key="info" title="Info">
-        <InfoTab id={id} dataEvent={dataEvent} />
+        <InfoTab dataEvent={dataEvent} />
       </Tab>
       <Tab key="location" title="Location">
-        <LocationTab id={id} dataEvent={dataEvent} />
+        <LocationTab dataEvent={dataEvent} />
       </Tab>
       <Tab key="ticket" title="Ticket">
         <TicketTab />

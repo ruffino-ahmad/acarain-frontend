@@ -30,7 +30,7 @@ const useHome = () => {
     return data;
   };
 
-  const currentEventQuery = `limit=${LIMIT_BANNER}&page=${PAGE_DEFAULT}&isPublish=true`;
+  const currentEventQuery = `limit=${LIMIT_BANNER}&page=${PAGE_DEFAULT}&isPublished=true`;
 
   const { data: dataFeaturedEvents, isLoading: isLoadingFeaturedEvents } =
     useQuery({

@@ -16,7 +16,7 @@ const useEvent = () => {
     currentCategory,
     currentisOnline,
     currentisFeatured,
-    currentisPublished
+    currentisPublished,
   } = useChangeUrl();
 
   const getEvents = async (): Promise<IApiResponse<IEvent[]>> => {
@@ -35,7 +35,7 @@ const useEvent = () => {
       params += `&isFeatured=${String(currentisFeatured)}`;
     }
 
-    if (currentisPublished) {
+    if (currentisPublished === "true" || currentisPublished === "false") {
       params += `&isPublished=${String(currentisPublished)}`;
     }
 
@@ -57,6 +57,7 @@ const useEvent = () => {
       currentCategory,
       currentisOnline,
       currentisFeatured,
+      currentisPublished,
     ],
     queryFn: () => getEvents(),
     enabled: router.isReady && !!currentPage && !!currentLimit,

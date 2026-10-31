@@ -84,7 +84,8 @@ const LandingPageLayoutNavbar = () => {
         <NavbarItem className="hidden lg:relative lg:flex">
           <Input
             isClearable
-            className="w-[300px]"
+            className="w-75"
+            //className="w-[300px]"
             placeholder="Search Event"
             startContent={<CiSearch />}
             onClear={() => setSearch("")}

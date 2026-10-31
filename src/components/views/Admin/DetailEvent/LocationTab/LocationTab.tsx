@@ -16,11 +16,10 @@ import useLocationTab from "./useLocationTab";
 
 interface LocationTabProps {
   dataEvent: IEvent;
-  id: string;
 }
 
 const LocationTab = (props: LocationTabProps) => {
-  const { dataEvent, id } = props;
+  const { dataEvent } = props;
 
   const {
     control,
@@ -42,7 +41,7 @@ const LocationTab = (props: LocationTabProps) => {
     handleRegencySearch,
     handleProvinceOpen,
     handleRegencyOpen,
-  } = useLocationTab({ dataEvent, id });
+  } = useLocationTab({ dataEvent });
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
