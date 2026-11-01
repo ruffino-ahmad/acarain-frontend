@@ -20,7 +20,12 @@ interface ILogin {
 
 interface UserExtended extends User {
   accessToken?: string;
+  refreshToken?: string;
   role?: string;
+}
+
+interface IRefreshToken {
+  refreshToken: string;
 }
 
 interface SessionExtended extends Session {
@@ -29,6 +34,9 @@ interface SessionExtended extends Session {
 
 interface JWTExtended extends JWT {
   user?: UserExtended;
+  accessToken?: string;
+  refreshToken?: string;
+  accessTokenExpires?: number;
 }
 
 interface IProfile {
@@ -57,6 +65,7 @@ export type {
   IRegister,
   IActivation,
   ILogin,
+  IRefreshToken,
   UserExtended,
   SessionExtended,
   JWTExtended,
