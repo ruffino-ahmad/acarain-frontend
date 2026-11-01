@@ -28,6 +28,7 @@ import { signOut, useSession } from "next-auth/react";
 import useLandingPageLayoutNavbar from "./useLandingPageLayoutNavbar";
 import { Fragment } from "react";
 import { IEvent } from "@/types/Event";
+import { getLogoutRedirect } from "@/utils/auth-redirect";
 
 const LandingPageLayoutNavbar = () => {
   const router = useRouter();
@@ -126,7 +127,7 @@ const LandingPageLayoutNavbar = () => {
             <Dropdown>
               <DropdownTrigger>
                 <Avatar
-                  src={dataProfile?.profilePicture}
+                  src={dataProfile?.profilePictureUrl}
                   className="cursor-pointer"
                   showFallback
                 />
@@ -134,17 +135,33 @@ const LandingPageLayoutNavbar = () => {
               <DropdownMenu>
                 <DropdownItem
                   key="admin"
-                  href="/admin/dashboard"
+                  href="/admin/event"
                   className={cn({
                     hidden: dataProfile?.role !== "admin",
                   })}
                 >
                   Admin
                 </DropdownItem>
-                <DropdownItem key="profile" href="/member/profile">
+                <DropdownItem
+                  key="profile"
+                  href="/member/profile"
+                  className={cn({
+                    hidden: dataProfile?.role === "admin",
+                  })}
+                >
                   Profile
                 </DropdownItem>
-                <DropdownItem key="signout" onPress={() => signOut()}>
+                <DropdownItem
+                  key="signout"
+                  onPress={() =>
+                    signOut({
+                      callbackUrl: getLogoutRedirect(
+                        router.pathname,
+                        router.asPath
+                      ),
+                    })
+                  }
+                >
                   Log Out
                 </DropdownItem>
               </DropdownMenu>
@@ -193,15 +210,29 @@ const LandingPageLayoutNavbar = () => {
                   }
                 )}
               >
-                <Link href="/admin/dashboard">Admin</Link>
+                <Link href="/admin/event">Admin</Link>
               </NavbarMenuItem>
-              <NavbarMenuItem className="text-default-700 [&:hover]:text-danger font-medium transition-colors">
-                <Link href="/member/dashboard">Profile</Link>
+              <NavbarMenuItem
+                className={cn(
+                  "text-default-700 [&:hover]:text-danger font-medium transition-colors",
+                  {
+                    hidden: dataProfile?.role === "admin",
+                  }
+                )}
+              >
+                <Link href="/member/profile">Profile</Link>
               </NavbarMenuItem>
               <NavbarMenuItem>
                 <Button
                   color="danger"
-                  onPress={() => signOut()}
+                  onPress={() =>
+                    signOut({
+                      callbackUrl: getLogoutRedirect(
+                        router.pathname,
+                        router.asPath
+                      ),
+                    })
+                  }
                   className="mt-2 w-full"
                   variant="bordered"
                   size="md"

@@ -1,6 +1,12 @@
 import instance from "@/libs/axios/instance";
 import endpoint from "./endpoint.constant";
-import { IActivation, ILogin, IRegister } from "@/types/Auth";
+import {
+  IActivation,
+  ILogin,
+  IRegister,
+  IUpdatePassword,
+  IUpdateProfile,
+} from "@/types/Auth";
 
 const authServices = {
   register: (payload: IRegister) => {
@@ -21,6 +27,12 @@ const authServices = {
   },
   getProfile: () => {
     return instance.get(`${endpoint.AUTH}/me`, {});
+  },
+  updateProfile: (payload: IUpdateProfile) => {
+    return instance.patch(`${endpoint.AUTH}/update-profile`, payload);
+  },
+  updatePassword: (payload: IUpdatePassword) => {
+    return instance.patch(`${endpoint.AUTH}/update-password`, payload);
   },
 };
 

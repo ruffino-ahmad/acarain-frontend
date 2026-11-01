@@ -1,4 +1,5 @@
 import { cn } from "@/utils/cn";
+import { getLogoutRedirect } from "@/utils/auth-redirect";
 import { Button, Listbox, ListboxItem } from "@heroui/react";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -74,7 +75,11 @@ const DashboardLayoutSidebar = (props: DahboardLayoutSidebarProps) => {
           variant="light"
           className="flex justify-start rounded-lg px-2 py-1.5"
           size="lg"
-          onPress={() => signOut()}
+          onPress={() =>
+            signOut({
+              callbackUrl: getLogoutRedirect(router.pathname, router.asPath),
+            })
+          }
         >
           <CiLogout />
           Logout

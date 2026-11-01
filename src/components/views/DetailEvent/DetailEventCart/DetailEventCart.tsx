@@ -81,7 +81,7 @@ const DetailEventCart = (props: IDetailEventCartProps) => {
             color="danger"
             size="lg"
             as={Link}
-            href={`/auth/login?callbackUrl=/event/${router.query.slug}`}
+            href={`/auth/login?callbackUrl=/events/${router.query.slug}`}
           >
             Login for book ticket
           </Button>

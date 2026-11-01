@@ -72,7 +72,6 @@ const Transaction = () => {
     <section>
       {Object.keys(query).length > 0 && (
         <DataTable
-          buttonTopContentLabel="Create Transaction"
           columns={COLUMN_LISTS_TRANSACTION}
           data={dataTransactions?.data || []}
           emptyContent="Transaction is empty"
