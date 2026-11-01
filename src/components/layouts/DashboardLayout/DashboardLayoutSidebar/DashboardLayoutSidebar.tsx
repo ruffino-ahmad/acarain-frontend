@@ -25,7 +25,7 @@ const DashboardLayoutSidebar = (props: DahboardLayoutSidebarProps) => {
   return (
     <div
       className={cn(
-        "border-r-1 border-default-200 fixed z-50 flex h-screen w-full max-w-[300px] -translate-x-full flex-col justify-between bg-white px-4 py-6 transition-all lg:relative lg:translate-x-0",
+        "border-r-1 border-default-200 fixed z-50 flex h-dvh w-full max-w-[300px] -translate-x-full flex-col justify-between bg-white px-4 py-6 transition-all lg:sticky lg:top-0 lg:translate-x-0",
         {
           "translate-x-0": isOpen,
         }

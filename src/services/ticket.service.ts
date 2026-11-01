@@ -9,6 +9,9 @@ const ticketServices = {
       `${endpoint.TICKET}/${id}/events`
     );
   },
+  getTicketById: (id: string) => {
+    return instance.get<IApiResponse<ITicket>>(`${endpoint.TICKET}/${id}`);
+  },
   createTicket: (payload: ICreateTicket) => {
     return instance.post<IApiResponse<ITicket>>(endpoint.TICKET, payload);
   },

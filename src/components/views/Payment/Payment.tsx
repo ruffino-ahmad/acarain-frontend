@@ -94,7 +94,7 @@ const Payment = () => {
           height={180}
         />
         {isLoading ? (
-          <div className="flex h-[300px] w-[300px] items-center justify-center">
+          <div className="h-75 w-75 flex items-center justify-center">
             <Spinner size="lg" color="danger" />
           </div>
         ) : (
