@@ -25,13 +25,9 @@ import {
   LuBan,
   LuCalendarClock,
   LuCalendarDays,
-  LuCircleAlert,
   LuCircleCheck,
-  LuCircleX,
-  LuClock,
   LuEllipsisVertical,
   LuFileText,
-  LuInfo,
   LuMapPin,
   LuRotateCcw,
   LuShoppingBag,
@@ -43,67 +39,11 @@ import {
 } from "react-icons/lu";
 
 import DeleteTransactionModal from "../DeleteTransactionModal";
+import {
+  STATUS_ACTION_META,
+  STATUS_META,
+} from "./DetailTransaction.constants";
 import useDetailTransaction, { OrderStatusAction } from "./useDetailTransaction";
-
-interface StatusMeta {
-  label: string;
-  icon: IconType;
-  noticeIcon: IconType;
-  badgeClassName: string;
-  noticeClassName: string;
-  message: string;
-}
-
-const STATUS_META: Record<IOrder["status"], StatusMeta> = {
-  pending: {
-    label: "Pending",
-    icon: LuClock,
-    noticeIcon: LuInfo,
-    badgeClassName: "bg-amber-50 text-amber-700 ring-amber-200",
-    noticeClassName: "border-amber-200 bg-amber-50 text-amber-800",
-    message: "This order is currently in pending status.",
-  },
-  completed: {
-    label: "Completed",
-    icon: LuCircleCheck,
-    noticeIcon: LuCircleCheck,
-    badgeClassName: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-    noticeClassName: "border-emerald-200 bg-emerald-50 text-emerald-800",
-    message: "This order has been completed successfully.",
-  },
-  cancelled: {
-    label: "Cancelled",
-    icon: LuCircleX,
-    noticeIcon: LuCircleAlert,
-    badgeClassName: "bg-red-50 text-red-700 ring-red-200",
-    noticeClassName: "border-red-200 bg-red-50 text-red-800",
-    message: "This order has been cancelled.",
-  },
-};
-
-const STATUS_CONFIRMATION: Record<OrderStatusAction, string> = {
-  completed:
-    "Mark this transaction as completed? Voucher codes will be generated for the buyer.",
-  cancelled:
-    "Cancel this transaction? The ticket stock will be returned to the event.",
-  pending:
-    "Reopen this transaction as pending? The ticket stock will be deducted again.",
-};
-
-const STATUS_BUTTON_COLOR: Record<
-  OrderStatusAction,
-  "success" | "danger" | "warning"
-> = {
-  completed: "success",
-  cancelled: "danger",
-  pending: "warning",
-};
-
-const STATUS_LABEL: Record<OrderStatusAction, string> = {
-  completed: "Completed",
-  cancelled: "Cancelled",
-  pending: "Pending",
-};
 
 interface StatusBadgeProps {
   status: IOrder["status"];
@@ -480,7 +420,7 @@ const DetailTransaction = () => {
           <ModalHeader>Update Transaction Status</ModalHeader>
           <ModalBody className="gap-4">
             <p className="text-medium">
-              {nextStatus ? STATUS_CONFIRMATION[nextStatus] : ""}
+              {nextStatus ? STATUS_ACTION_META[nextStatus].confirmation : ""}
             </p>
             <InlineErrorAlert
               title="Unable to update transaction"
@@ -498,13 +438,17 @@ const DetailTransaction = () => {
               Cancel
             </Button>
             <Button
-              color={nextStatus ? STATUS_BUTTON_COLOR[nextStatus] : "success"}
+              color={
+                nextStatus
+                  ? STATUS_ACTION_META[nextStatus].buttonColor
+                  : "success"
+              }
               isLoading={isPendingUpdateStatus}
               isDisabled={!nextStatus || isPendingUpdateStatus}
               className="w-full sm:w-auto"
               onPress={handleConfirmStatus}
             >
-              {nextStatus ? STATUS_LABEL[nextStatus] : "Confirm"}
+              {nextStatus ? STATUS_ACTION_META[nextStatus].label : "Confirm"}
             </Button>
           </ModalFooter>
         </ModalContent>
