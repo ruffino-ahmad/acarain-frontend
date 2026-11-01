@@ -12,10 +12,33 @@ const orderServices = {
   getOrderById: (id: string) => {
     return instance.get<IApiResponse<IOrder>>(`${endpoint.ORDER}/${id}`);
   },
-  getMemberOrder: (params: string) => {
+  getMemberOrders: (params: string) => {
     return instance.get<IApiResponse<IOrder[]>>(
       `${endpoint.ORDER}/history?${params}`
     );
+  },
+  getAdminOrders: (params: string) => {
+    return instance.get<IApiResponse<IOrder[]>>(
+      `${endpoint.ORDER}?${params}`
+    );
+  },
+  completeAdminOrder: (id: string) => {
+    return instance.patch<IApiResponse<IOrder>>(
+      `${endpoint.ORDER}/${id}/completed`
+    );
+  },
+  pendingAdminOrder: (id: string) => {
+    return instance.patch<IApiResponse<IOrder>>(
+      `${endpoint.ORDER}/${id}/pending`
+    );
+  },
+  cancelAdminOrder: (id: string) => {
+    return instance.patch<IApiResponse<IOrder>>(
+      `${endpoint.ORDER}/${id}/cancelled`
+    );
+  },
+  deleteAdminOrder: (id: string) => {
+    return instance.delete<IApiResponse<IOrder>>(`${endpoint.ORDER}/${id}`);
   },
 };
 

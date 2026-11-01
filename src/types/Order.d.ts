@@ -3,6 +3,13 @@ interface IOrderVoucher {
   isPrint: boolean;
 }
 
+interface IOrderCreatedBy {
+  _id: string;
+  fullname: string;
+  username: string;
+  email: string;
+}
+
 interface IOrder {
   _id: string;
   orderId: string;
@@ -16,8 +23,9 @@ interface IOrder {
   vouchers?: IOrderVoucher[];
   events: string;
   ticket: string;
+  createdBy: string | IOrderCreatedBy;
   createdAt?: string;
   updatedAt?: string;
 }
 
-export type { IOrder, IOrderVoucher };
+export type { IOrder, IOrderVoucher, IOrderCreatedBy };

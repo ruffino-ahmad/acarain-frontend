@@ -14,7 +14,7 @@ const useTransaction = () => {
 
   const getMemberTransactions = async (): Promise<IApiResponse<IOrder[]>> => {
     const params = `limit=${currentLimit}&page=${currentPage}&search=${currentSearch}`;
-    const res = await orderServices.getMemberOrder(params);
+    const res = await orderServices.getMemberOrders(params);
     const { data } = res;
     return data;
   };
