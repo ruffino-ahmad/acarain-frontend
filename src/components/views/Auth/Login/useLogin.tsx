@@ -31,6 +31,7 @@ const useLogin = () => {
     reset,
     clearErrors,
     setError,
+    setValue,
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
@@ -74,6 +75,7 @@ const useLogin = () => {
     errors,
     handleLogin,
     isPendingLogin,
+    setValue,
   };
 };
 

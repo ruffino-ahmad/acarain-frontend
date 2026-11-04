@@ -17,6 +17,7 @@ const Login = () => {
     errors,
     handleLogin,
     isPendingLogin,
+    setValue,
   } = useLogin();
   return (
     <div className="flex w-full flex-col items-center justify-center gap-10 lg:flex-row lg:gap-20">
@@ -103,6 +104,39 @@ const Login = () => {
               {isPendingLogin ? <Spinner color="white" size="sm" /> : "Login"}
             </Button>
           </form>
+          <div className="mt-6 border-t pt-4">
+            <p className="mb-3 text-center text-sm font-semibold">
+              Demo account untuk recruiter
+            </p>
+            <div className="flex flex-col gap-2">
+              <Button
+                type="button"
+                variant="flat"
+                color="primary"
+                onPress={() => {
+                  setValue("identifier", "member");
+                  setValue("password", "ABC12345");
+                }}
+              >
+                Isi akun Demo Member
+              </Button>
+              <Button
+                type="button"
+                variant="flat"
+                color="secondary"
+                onPress={() => {
+                  setValue("identifier", "admin");
+                  setValue("password", "ABC12345");
+                }}
+              >
+                Isi akun Demo Admin
+              </Button>
+            </div>
+            <p className="mt-3 text-center text-xs text-default-500">
+              Klik tombol di atas untuk mengisi kredensial demo secara
+              otomatis.
+            </p>
+          </div>
         </CardBody>
       </Card>
     </div>
