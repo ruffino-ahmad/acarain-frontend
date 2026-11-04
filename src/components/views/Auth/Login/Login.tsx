@@ -106,7 +106,7 @@ const Login = () => {
           </form>
           <div className="mt-6 border-t pt-4">
             <p className="mb-3 text-center text-sm font-semibold">
-              Demo account untuk recruiter
+              Demo account
             </p>
             <div className="flex flex-col gap-2">
               <Button
@@ -116,7 +116,7 @@ const Login = () => {
                 color="danger"
                 onPress={() => {
                   setValue("identifier", "member");
-                  setValue("password", "ABC12345");
+                  setValue("password", "Abc12345");
                 }}
               >
                 Use Member Demo Account
@@ -128,15 +128,14 @@ const Login = () => {
                 color="danger"
                 onPress={() => {
                   setValue("identifier", "admin");
-                  setValue("password", "ABC12345");
+                  setValue("password", "Abc12345");
                 }}
               >
                 Use Admin Demo Account
               </Button>
             </div>
-            <p className="mt-3 text-center text-xs text-default-500">
-              Klik tombol di atas untuk mengisi kredensial demo secara
-              otomatis.
+            <p className="text-default-500 mt-3 text-center text-xs">
+              Klik tombol di atas untuk mengisi kredensial demo secara otomatis.
             </p>
           </div>
         </CardBody>
