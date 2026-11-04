@@ -135,7 +135,8 @@ const Login = () => {
               </Button>
             </div>
             <p className="text-default-500 mt-3 text-center text-xs">
-              Klik tombol di atas untuk mengisi kredensial demo secara otomatis.
+              Click the button above to automatically fill in your demo
+              credentials.
             </p>
           </div>
         </CardBody>
