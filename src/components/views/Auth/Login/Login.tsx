@@ -113,25 +113,25 @@ const Login = () => {
                 type="button"
                 className="w-full"
                 variant="flat"
-                color="primary"
+                color="danger"
                 onPress={() => {
                   setValue("identifier", "member");
                   setValue("password", "ABC12345");
                 }}
               >
-                Isi akun Demo Member
+                Use Member Demo Account
               </Button>
               <Button
                 type="button"
                 className="w-full"
-                variant="flat"
-                color="secondary"
+                variant="bordered"
+                color="danger"
                 onPress={() => {
                   setValue("identifier", "admin");
                   setValue("password", "ABC12345");
                 }}
               >
-                Isi akun Demo Admin
+                Use Admin Demo Account
               </Button>
             </div>
             <p className="mt-3 text-center text-xs text-default-500">
