@@ -36,8 +36,8 @@ const Login = () => {
           height={1024}
         />
       </div>
-      <Card>
-        <CardBody className="p-8">
+      <Card className="w-full max-w-md">
+        <CardBody className="p-4 sm:p-8">
           <h2 className="text-danger-500 text-2xl font-bold">Login</h2>
           <p className="text-small mb-4 mt-2">
             Don{"'"}t have an account?{" "}
@@ -52,7 +52,7 @@ const Login = () => {
           />
           <form
             className={cn(
-              "flex w-80 flex-col",
+              "flex w-full flex-col",
               Object.keys(errors).length > 0 ? "gap-2" : "gap-4"
             )}
             onSubmit={handleSubmit(handleLogin)}
@@ -111,6 +111,7 @@ const Login = () => {
             <div className="flex flex-col gap-2">
               <Button
                 type="button"
+                className="w-full"
                 variant="flat"
                 color="primary"
                 onPress={() => {
@@ -122,6 +123,7 @@ const Login = () => {
               </Button>
               <Button
                 type="button"
+                className="w-full"
                 variant="flat"
                 color="secondary"
                 onPress={() => {
