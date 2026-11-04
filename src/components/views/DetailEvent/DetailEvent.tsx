@@ -35,7 +35,7 @@ const DetailEvent = () => {
       />
       <Skeleton
         isLoaded={!!dataDetailEvent?.name}
-        className="h-6 w-1/4 rounded-lg"
+        className="min-h-6 rounded-lg"
       >
         <Breadcrumbs>
           <BreadcrumbItem href="/">Home</BreadcrumbItem>
@@ -44,47 +44,53 @@ const DetailEvent = () => {
         </Breadcrumbs>
       </Skeleton>
 
-      <section className="mt-4 flex flex-col gap-10 lg:flex-row">
+      <section className="mt-4 flex flex-col gap-6 lg:flex-row lg:gap-10">
         <div className="w-full lg:w-4/6">
           <Skeleton
             isLoaded={!!dataDetailEvent}
-            className="mb-2 h-8 rounded-lg"
+            className="mb-2 min-h-8 rounded-lg"
           >
-            <h1 className="text-danger text-2xl font-semibold">
+            <h1 className="text-foreground text-2xl font-bold tracking-tight">
               {dataDetailEvent?.name}
             </h1>
           </Skeleton>
-          <Skeleton
-            isLoaded={
-              !!dataDetailEvent?.startDate || !!dataDetailEvent?.endDate
-            }
-            className="mb-2 h-6 w-1/2 rounded-lg"
-          >
-            <div className="text-foreground-500 flex items-center gap-2">
-              <FaClock width={16} />
-              <p>
-                {convertTime(dataDetailEvent?.startDate)} -{" "}
-                {convertTime(dataDetailEvent?.endDate)}
-              </p>
-            </div>
-          </Skeleton>
-          <Skeleton
-            isLoaded={
-              !!dataDetailEvent?.isOnline ||
-              !!dataDetailEvent?.location?.address
-            }
-            className="mb-2 h-6 w-1/2 rounded-lg"
-          >
-            <div className="text-foreground-500 flex items-center gap-2">
-              <FaLocationDot width={16} />
-              <p>
-                {dataDetailEvent?.isOnline ? "Online" : "Offline"}{" "}
-                {dataDetailEvent?.isOnline
-                  ? ""
-                  : ` - ${dataDetailEvent?.location?.address}`}
-              </p>
-            </div>
-          </Skeleton>
+          <div className="mb-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Skeleton
+              isLoaded={
+                !!dataDetailEvent?.startDate || !!dataDetailEvent?.endDate
+              }
+              className="min-h-6 rounded-lg"
+            >
+              <div className="flex items-center gap-2 text-foreground-600">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-default-100">
+                  <FaClock width={16} />
+                </span>
+                <p>
+                  {convertTime(dataDetailEvent?.startDate)} -{" "}
+                  {convertTime(dataDetailEvent?.endDate)}
+                </p>
+              </div>
+            </Skeleton>
+            <Skeleton
+              isLoaded={
+                !!dataDetailEvent?.isOnline ||
+                !!dataDetailEvent?.location?.address
+              }
+              className="min-h-6 rounded-lg"
+            >
+              <div className="flex items-center gap-2 text-foreground-600">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-default-100">
+                  <FaLocationDot width={16} />
+                </span>
+                <p>
+                  {dataDetailEvent?.isOnline ? "Online" : "Offline"}{" "}
+                  {dataDetailEvent?.isOnline
+                    ? ""
+                    : ` - ${dataDetailEvent?.location?.address}`}
+                </p>
+              </div>
+            </Skeleton>
+          </div>
           <Skeleton
             className="mb-4 aspect-video w-full"
             isLoaded={!!dataDetailEvent?.bannerUrl}
@@ -95,10 +101,10 @@ const DetailEvent = () => {
                 alt="Event Banner"
                 width={1920}
                 height={1080}
-                className="aspect-video w-full rounded-lg object-cover"
+                className="aspect-video w-full rounded-xl object-cover shadow-sm ring-1 ring-default-200"
               ></Image>
             ) : (
-              <div className="bg-default-100 aspect-video w-full rounded-lg"></div>
+              <div className="bg-default-100 aspect-video w-full rounded-xl"></div>
             )}
           </Skeleton>
           <Tabs aria-label="Tab Detail Event" fullWidth>

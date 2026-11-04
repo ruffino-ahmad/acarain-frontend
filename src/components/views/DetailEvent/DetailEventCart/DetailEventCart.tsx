@@ -33,8 +33,8 @@ const DetailEventCart = (props: IDetailEventCartProps) => {
           {!dataTicketInCart ? (
             <p className="text-foreground-500">Your cart is empty</p>
           ) : (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h4 className="font-bold">{dataTicketInCart.name}</h4>
                 <div className="flex items-center gap-2">
                   <Button
